@@ -102,20 +102,3 @@ docker-compose exec django python manage.py migrate
 # API: http://localhost:8000
 # Swagger Docs: http://localhost:8000/api/docs/
 # Admin Panel: http://localhost:8000/admin/
-snapfood/
-├── apps/
-│   ├── accounts/          # مدیریت کاربران و نقش‌ها
-│   ├── restaurants/       # رستوران‌ها و منو
-│   ├── orders/           # سفارشات و سبد خرید
-│   └── delivery/         # تحویل و موقعیت‌یابی
-├── config/
-│   ├── settings/         # تنظیمات (base, dev, prod)
-│   ├── urls.py          # URL اصلی
-│   └── celery.py        # تنظیمات Celery
-├── requirements/
-│   ├── base.txt         # وابستگی‌های اصلی
-│   └── dev.txt          # وابستگی‌های توسعه
-├── tests/               # تست‌ها
-├── docker-compose.yml
-├── Dockerfile
-└── README.md
