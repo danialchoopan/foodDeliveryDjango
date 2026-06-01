@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}اسنپ فود | سامانه سفارش آنلاین غذا{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 0;">
+    <h1 style="font-size: 3rem; color: var(--primary);">تجربه غذای لذیذ با اسنپ فود</h1>
+    <p style="font-size: 1.2rem; color: #666;">سفارش آنلاین از بهترین رستوران‌ها و فست‌فودهای اطراف شما</p>
+    <div style="margin-top: 2rem;">
+        {% if user.is_authenticated %}
+            <a href="{% url 'customer_dashboard' %}" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">ورود به پنل کاربری</a>
+        {% else %}
+            <a href="{% url 'web_login' %}" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; margin-left: 1rem;">ورود کاربران</a>
+            <a href="/register" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; background-color: var(--secondary);">ثبت‌نام پیک و رستوران</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🍕</div>
+        <h3>تنوع بی‌نظیر</h3>
+        <p>دسترسی به صدها منوی متنوع از بهترین رستوران‌ها</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+        <h3>ارسال سریع</h3>
+        <p>تحویل غذا در کمترین زمان ممکن با سیستم هوشمند پیک</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">💰</div>
+        <h3>پرداخت آسان</h3>
+        <p>امکان پرداخت آنلاین و اعتباری با امنیت بالا</p>
+    </div>
+</div>
+{% endblock %}

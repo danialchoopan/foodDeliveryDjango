@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}ثبت‌نام - اسنپ فود{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 4rem auto;">
+    <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem;">عضویت در اسنپ فود</h2>
+
+    {% if messages %}
+    <div style="margin-bottom: 1rem;">
+        {% for message in messages %}
+        <div class="badge {% if message.tags == 'error' %}badge-danger{% else %}badge-success{% endif %}" style="display: block; padding: 1rem; margin-bottom: 0.5rem;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem;">نام کاربری:</label>
+            <input type="text" name="username" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem;">ایمیل:</label>
+            <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem;">رمز عبور:</label>
+            <input type="password" name="password" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem;">نوع حساب کاربری:</label>
+            <select name="role" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                <option value="customer">مشتری</option>
+                <option value="restaurant_owner">صاحب رستوران</option>
+            </select>
+        </div>
+        <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1.1rem;">ثبت‌نام</button>
+    </form>
+
+    <div style="margin-top: 1.5rem; text-align: center;">
+        <p>قبلاً عضو شده‌اید؟ <a href="{% url 'web_login' %}" style="color: var(--primary); text-decoration: none;">وارد شوید</a></p>
+    </div>
+</div>
+{% endblock %}

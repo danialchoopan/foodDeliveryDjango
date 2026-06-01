@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}دسترسی محدود - اسنپ فود{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 4rem auto; text-align: center;">
+    <h1 style="font-size: 5rem; color: var(--primary); margin: 0;">403</h1>
+    <h2 style="margin-bottom: 2rem;">دسترسی غیرمجاز</h2>
+    <p style="color: #666; margin-bottom: 2rem;">شما اجازه دسترسی به این صفحه را ندارید.</p>
+    <a href="{% url 'index' %}" class="btn">بازگشت به صفحه اصلی</a>
+</div>
+{% endblock %}
