@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from django.db.models import Avg
 from apps.accounts.models import User
 
 
@@ -126,6 +127,49 @@ class Restaurant(models.Model):
         if not self.pk:  # New restaurant
             self.is_verified = False  # Requires admin approval
         super().save(*args, **kwargs)
+
+    @property
+    def average_rating(self):
+        return self.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+
+
+class RestaurantReview(models.Model):
+    """
+    Review and rating for a restaurant
+    """
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='restaurant_reviews')
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name='امتیاز'
+    )
+    comment = models.TextField(blank=True, verbose_name='نظر')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'نظر رستوران'
+        verbose_name_plural = 'نظرات رستوران'
+        unique_together = ['restaurant', 'user']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.restaurant.name} ({self.rating})"
+
+
+class FavoriteRestaurant(models.Model):
+    """
+    User's favorite restaurants
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='favorited_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'رستوران مورد علاقه'
+        verbose_name_plural = 'رستوران‌های مورد علاقه'
+        unique_together = ['user', 'restaurant']
+
+    def __str__(self):
+        return f"{self.user.username} liked {self.restaurant.name}"
 
 
 class MenuCategory(models.Model):

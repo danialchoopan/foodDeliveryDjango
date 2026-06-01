@@ -14,8 +14,7 @@ from .serializers import (
 )
 from .services import (
     RiderMatchingService, DeliveryFeeCalculator, 
-    RiderPerformanceService, DeliveryTrackingService,
-    find_nearest_available_riders
+    RiderPerformanceService, DeliveryTrackingService
 )
 from apps.accounts.permissions import IsDeliveryRider, IsAdminUser, IsDeliveryRiderOrAdmin
 from apps.orders.models import Order

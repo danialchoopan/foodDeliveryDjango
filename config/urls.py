@@ -6,8 +6,21 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from . import views
 
 urlpatterns = [
+    # Web Panels
+    path('', views.index, name='index'),
+    path('login/', views.login_view, name='web_login'),
+    path('logout/', views.logout_view, name='web_logout'),
+    path('register/', views.register_view, name='web_register'),
+    path('profile/', views.profile_view, name='profile'),
+    path('restaurant/<int:pk>/', views.restaurant_detail, name='restaurant_detail'),
+    path('restaurant/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('dashboard/customer/', views.customer_dashboard, name='customer_dashboard'),
+    path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
+    path('dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),
+
     # Admin panel
     path('admin/', admin.site.urls),
     
@@ -27,5 +40,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    
-    

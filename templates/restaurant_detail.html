@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ restaurant.name }} | اسنپ فود{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1>{{ restaurant.name }}</h1>
+            <p style="color: #666;">{{ restaurant.get_cuisine_type_display }} • ⭐️ {{ restaurant.average_rating|floatformat:1 }}</p>
+            <p>{{ restaurant.address }}</p>
+        </div>
+        <div>
+            <form action="{% url 'toggle_favorite' restaurant.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background-color: {% if is_favorite %}#666{% else %}var(--primary){% endif %};">
+                    {% if is_favorite %}💔 حذف از علاقه‌مندی{% else %}❤️ افزودن به علاقه‌مندی{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <div>
+        <div class="card">
+            <h2>منوی رستوران</h2>
+            {% for item in menu_items %}
+                <div style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #eee;">
+                    <div>
+                        <h3 style="margin: 0;">{{ item.name }}</h3>
+                        <p style="color: #888; font-size: 0.9rem; margin: 0.5rem 0;">{{ item.description }}</p>
+                        <strong style="color: var(--primary);">{{ item.price }} تومان</strong>
+                    </div>
+                    <button class="btn" style="height: fit-content;">+ افزودن</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="card">
+            <h2>نظرات کاربران</h2>
+            {% for review in reviews %}
+                <div style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <strong>{{ review.user.username }}</strong>
+                        <span style="color: #ffc107;">
+                            {% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% endif %}{% endfor %}
+                        </span>
+                    </div>
+                    <p style="margin: 0.5rem 0;">{{ review.comment }}</p>
+                    <small style="color: #aaa;">{{ review.created_at|date:"Y/m/d" }}</small>
+                </div>
+            {% empty %}
+                <p style="color: #888; text-align: center; padding: 1rem;">هنوز نظری ثبت نشده است.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <h3>ثبت نظر</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div style="margin-bottom: 1rem;">
+                    <label>امتیاز (۱ تا ۵):</label>
+                    <select name="rating" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="5">۵ ستاره</option>
+                        <option value="4">۴ ستاره</option>
+                        <option value="3">۳ ستاره</option>
+                        <option value="2">۲ ستاره</option>
+                        <option value="1">۱ ستاره</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label>نظر شما:</label>
+                    <textarea name="comment" rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">ارسال نظر</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

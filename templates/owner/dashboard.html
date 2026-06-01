@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}پنل مدیریت رستوران | اسنپ فود{% endblock %}
+
+{% block content %}
+<div style="display: flex;">
+    <div class="sidebar">
+        <h3>مدیریت رستوران</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--primary);">📊 داشبورد</a></li>
+            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">📋 مدیریت منو</a></li>
+            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">🍔 سفارشات دریافتی</a></li>
+            <li style="padding: 0.5rem 0;"><a href="{% url 'profile' %}" style="text-decoration: none; color: var(--secondary);">🔐 تنظیمات امنیتی</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content" style="flex: 1;">
+        {% if not restaurant %}
+            <div class="card" style="text-align: center;">
+                <h2>شما هنوز رستورانی ثبت نکرده‌اید.</h2>
+                <a href="#" class="btn">ثبت رستوران جدید</a>
+            </div>
+        {% else %}
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                <div class="card" style="text-align: center;">
+                    <h3>فروش امروز</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">{{ report.total_revenue }} تومان</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3>سفارشات جدید</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #ffc107;">{{ report.pending_orders }}</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3>وضعیت رستوران</h3>
+                    <p>
+                        <span class="badge {% if restaurant.is_open %}badge-success{% else %}badge-danger{% endif %}">
+                            {{ restaurant.is_open|yesno:"باز است,بسته است" }}
+                        </span>
+                    </p>
+                    <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">تغییر وضعیت</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>سفارشات اخیر ({{ restaurant.name }})</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>شماره</th>
+                            <th>مشتری</th>
+                            <th>آیتم‌ها</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.order_number }}</td>
+                            <td>{{ order.customer.username }}</td>
+                            <td>{{ order.order_items.count }} آیتم</td>
+                            <td>{{ order.total_amount }}</td>
+                            <td><span class="badge badge-warning">{{ order.get_status_display }}</span></td>
+                            <td>
+                                <button class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">تایید</button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem;">سفارشی وجود ندارد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

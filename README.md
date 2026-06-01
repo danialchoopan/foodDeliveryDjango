@@ -1,97 +1,82 @@
-# 🍔 SnapFood - API دلیوری غذا (Restaurant & Delivery System)
+# 🍔 SnapFood - Food Delivery System (Restaurant & Delivery)
 
-یک سیستم تحویل غذای پیشرفته با قابلیت‌های چندنقشی، مدیریت همزمانی، موقعیت‌یابی جغرافیایی و قیمت‌گذاری پویا.
-
-[![Django](https://img.shields.io/badge/Django-4.2-green.svg)](https://www.djangoproject.com/)
-[![DRF](https://img.shields.io/badge/DRF-3.14-red.svg)](https://www.django-rest-framework.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
+SnapFood is an advanced food delivery system with multi-role capabilities, geolocation tracking, and dynamic pricing. This project includes both a powerful REST API and a simplified Web Panel for Customers, Restaurant Owners, and Admins.
 
 ---
 
-## 📋 فهرست مطالب
+## 🚀 Getting Started
 
-- [ویژگی‌ها](#-ویژگی‌ها)
-- [نقش‌های کاربری](#-نقش‌های-کاربری)
-- [تکنولوژی‌های استفاده شده](#-تکنولوژی‌های-استفاده-شده)
-- [نصب و راه‌اندازی](#-نصب-و-راه‌اندازی)
-- [راه‌اندازی با Docker](#-راه‌اندازی-با-docker)
----
+Follow these steps to set up and run the project on your local machine.
 
-## ✨ ویژگی‌ها
-
-### سیستم چندنقشی (Multi-role)
-- **مشتری (Customer)**: ثبت سفارش، مشاهده رستوران‌های نزدیک، ردیابی سفارش
-- **صاحب رستوران (RestaurantOwner)**: مدیریت رستوران، منو، مشاهده سفارشات و گزارش فروش
-- **راننده (DeliveryRider)**: مشاهده سفارش‌های نزدیک، قبول سفارش، آپدیت موقعیت
-- **ادمین (Admin)**: مدیریت کامل همه بخش‌ها
-
-### قابلیت‌های پیشرفته
-- 📍 **موقعیت‌یابی جغرافیایی**: فیلتر رستوران‌های نزدیک، محاسبه مسافت، تخمین زمان تحویل
-- 🔒 **مدیریت همزمانی**: استفاده از `select_for_update()` برای جلوگیری از تداخل سفارشات همزمان
-- 💰 **قیمت‌گذاری پویا**: هزینه ارسال بر اساس مسافت و زمان شلوغی (Peak Time)
-- 🚦 **صف سفارش**: بسته شدن خودکار رستوران در صورت ازدحام سفارش (سیستم Busy)
-- 📊 **گزارشات**: گزارش فروش روزانه برای رستورانداران
-- 🔐 **احراز هویت JWT**: امنیت بالا با توکن‌های دسترسی
-- 📝 **مستندات خودکار**: Swagger/OpenAPI با drf-spectacular
-
----
-
-## 👥 نقش‌های کاربری
-
-| نقش | وظایف اصلی | دسترسی‌ها |
-|------|------------|-----------|
-| **مشتری** | ثبت سفارش، مشاهده رستوران‌ها، ردیابی | ایجاد و مشاهده سفارشات خود |
-| **صاحب رستوران** | مدیریت رستوران و منو، گزارشات | مدیریت رستوران‌های خود |
-| **راننده** | قبول سفارش، آپدیت موقعیت | مشاهده و قبول سفارش‌های نزدیک |
-| **ادمین** | مدیریت همه چیز | دسترسی کامل به تمام APIها |
-
----
-
-## 🛠 تکنولوژی‌های استفاده شده
-
-- **Backend**: Django 4.2, Django REST Framework 3.14
-- **Database**: PostgreSQL 15
-- **Cache & Message Broker**: Redis 7
-- **Task Queue**: Celery 5.3
-- **Authentication**: JWT (djangorestframework-simplejwt)
-- **Documentation**: drf-spectacular (Swagger/OpenAPI)
-- **Geolocation**: GeoPy (محاسبه فاصله)
-- **Containerization**: Docker & Docker Compose
-- **Testing**: Pytest, pytest-django
-
----
-
-## 🚀 نصب و راه‌اندازی
-
-### پیش‌نیازها
+### 1. Prerequisites
 - Python 3.11+
-- PostgreSQL 15+
-- Redis 7+ (اختیاری، برای Celery)
-- Docker & Docker Compose (اختیاری)
+- Virtual environment (recommended)
 
----
-
-### 🐳 راه‌اندازی با Docker (توصیه شده)
-
+### 2. Installation
 ```bash
-# 1. کلون کردن پروژه
+# Clone the repository
 git clone https://github.com/yourusername/snapfood.git
 cd snapfood
 
-# 2. کپی فایل محیطی
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements/base.txt
+pip install -r requirements/dev.txt
+```
+
+### 3. Configuration
+Copy the example environment file and adjust if necessary:
+```bash
 cp .env.example .env
+```
+*Note: The project is pre-configured to use SQLite for easy local setup.*
 
-# 3. ویرایش فایل .env (در صورت نیاز)
-nano .env
+### 4. Database Setup & Migrations
+```bash
+python manage.py makemigrations accounts restaurants orders delivery
+python manage.py migrate
+```
 
-# 4. ساخت و اجرای کانتینرها
-docker-compose up --build
+### 5. Seed Initial Data
+Run the following script to create sample users (Admin, Customers, Owners, Riders), restaurants, and menus:
+```bash
+python seed_data.py
+```
 
-# 5. اجرای migrations (به صورت خودکار در entrypoint انجام می‌شود)
-docker-compose exec django python manage.py migrate
+### 6. Run the Server
+```bash
+python manage.py runserver
+```
+- **Web Panels**: [http://localhost:8000](http://localhost:8000)
+- **Admin Panel**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+- **API Documentation**: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/)
 
-# 6. دسترسی به پروژه
-# API: http://localhost:8000
-# Swagger Docs: http://localhost:8000/api/docs/
-# Admin Panel: http://localhost:8000/admin/
+---
+
+## 👥 User Roles & Features
+
+| Role | Key Features |
+|------|--------------|
+| **Customer** | Browse restaurants, Favorite shops, Order food, Rate & Review, Track deliveries. |
+| **Restaurant Owner**| Manage Menu (Categories/Items), View orders, Sales reports, Toggle open status. |
+| **Delivery Rider** | Accept nearby orders, Update live location, Update delivery status. |
+| **Admin** | Full system overview, Verify new restaurants, Manage users and zones. |
+
+---
+
+## 📖 API Documentation
+
+For detailed information on how to connect your Android application to this backend, please refer to the dedicated API guide:
+
+👉 **[READMEAPI.md (Persian)](READMEAPI.md)**
+
+---
+
+## 🛠 Tech Stack
+- **Backend**: Django 4.2 & Django REST Framework
+- **Database**: SQLite (Dev) / PostgreSQL (Prod)
+- **Auth**: JWT & Session-based
+- **Styling**: Plain HTML/CSS (Responsive & RTL support)

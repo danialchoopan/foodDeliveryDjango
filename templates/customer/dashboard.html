@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}پنل مشتری | اسنپ فود{% endblock %}
+
+{% block content %}
+<div style="display: flex;">
+    <div class="sidebar">
+        <h3>منوی دسترسی</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 0.5rem 0;"><a href="{% url 'customer_dashboard' %}" style="text-decoration: none; color: var(--primary);">🏠 رستوران‌ها</a></li>
+            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">🛍 سفارشات من</a></li>
+            <li style="padding: 0.5rem 0;"><a href="{% url 'profile' %}" style="text-decoration: none; color: var(--secondary);">👤 پروفایل و امنیت</a></li>
+        </ul>
+
+        <div style="margin-top: 2rem;">
+            <h4>❤️ مورد علاقه</h4>
+            <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
+                {% for fav in favorites %}
+                    <li style="padding: 0.3rem 0;"><a href="{% url 'restaurant_detail' fav.restaurant.pk %}" style="text-decoration: none; color: #666;">{{ fav.restaurant.name }}</a></li>
+                {% empty %}
+                    <li style="color: #aaa;">هنوز موردی اضافه نکردید.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content" style="flex: 1;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="card" style="background: #d4edda; color: #155724; padding: 1rem; border: 1px solid #c3e6cb;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="card">
+            <h2>رستوران‌های برتر</h2>
+            <div class="grid">
+                {% for rest in restaurants %}
+                <div class="card" style="padding: 0; overflow: hidden; border: 1px solid #eee;">
+                    <div style="height: 150px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                        [تصویر رستوران]
+                    </div>
+                    <div style="padding: 1rem;">
+                        <h3 style="margin: 0;"><a href="{% url 'restaurant_detail' rest.pk %}" style="text-decoration: none; color: var(--secondary);">{{ rest.name }}</a></h3>
+                        <p style="color: #666; font-size: 0.9rem;">{{ rest.get_cuisine_type_display }} • ⭐ {{ rest.average_rating|floatformat:1 }}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="badge {% if rest.is_open %}badge-success{% else %}badge-danger{% endif %}">
+                                {{ rest.is_open|yesno:"باز است,بسته است" }}
+                            </span>
+                            <a href="{% url 'restaurant_detail' rest.pk %}" class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">مشاهده منو</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>آخرین سفارشات</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>شماره سفارش</th>
+                        <th>رستوران</th>
+                        <th>تاریخ</th>
+                        <th>مبلغ</th>
+                        <th>وضعیت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.order_number }}</td>
+                        <td>{{ order.restaurant.name }}</td>
+                        <td>{{ order.created_at|date:"Y/m/d" }}</td>
+                        <td>{{ order.total_amount }} تومان</td>
+                        <td><span class="badge badge-warning">{{ order.get_status_display }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem; color: #888;">هنوز سفارشی ثبت نکرده‌اید.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
