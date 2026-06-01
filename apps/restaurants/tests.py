@@ -5,7 +5,7 @@ from django.urls import reverse
 
 User = get_user_model()
 
-class SnapFoodTests(TestCase):
+class DanialFoodTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='password123', role='customer')
@@ -46,7 +46,7 @@ class SnapFoodTests(TestCase):
         self.client.login(username='adminuser', password='password123')
         response = self.client.get(reverse('admin_dashboard'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "داشبورد مدیریتی اسنپ فود")
+        self.assertContains(response, "داشبورد مدیریتی دانیال فود")
 
     def test_favorite_toggle(self):
         self.client.login(username='testuser', password='password123')

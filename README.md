@@ -1,6 +1,6 @@
-# 🍔 SnapFood - Food Delivery System (Restaurant & Delivery)
+# 🍔 DanialFood - Food Delivery System (Restaurant & Delivery)
 
-SnapFood is an advanced food delivery system with multi-role capabilities, geolocation tracking, and dynamic pricing. This project includes both a powerful REST API and a simplified Web Panel for Customers, Restaurant Owners, and Admins.
+DanialFood is an advanced food delivery system with multi-role capabilities, geolocation tracking, and dynamic pricing. This project includes both a powerful REST API and a simplified Web Panel for Customers, Restaurant Owners, and Admins.
 
 ---
 

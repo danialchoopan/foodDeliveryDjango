@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}پنل مشتری | اسنپ فود{% endblock %}
+{% block title %}پنل مشتری | دانیال فود{% endblock %}
 
 {% block content %}
 <div style="display: flex;">
@@ -30,6 +30,46 @@
                 <div class="card" style="background: #d4edda; color: #155724; padding: 1rem; border: 1px solid #c3e6cb;">{{ message }}</div>
             {% endfor %}
         {% endif %}
+
+        <div class="card">
+            <h2>📍 مدیریت آدرس‌ها</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                {% for addr in addresses %}
+                <div class="card" style="flex: 1; min-width: 200px; {% if addr.is_active %}border: 2px solid var(--primary);{% endif %}">
+                    <h4 style="margin-top: 0;">{{ addr.title }} {% if addr.is_default %}(پیش‌فرض){% endif %}</h4>
+                    <p style="font-size: 0.9rem; color: #666;">{{ addr.city }} - {{ addr.address_text }}</p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        {% if not addr.is_active %}
+                        <a href="{% url 'set_active_address' addr.pk %}" class="btn" style="background: #6c757d; font-size: 0.8rem; padding: 0.3rem 0.6rem;">فعال‌سازی</a>
+                        {% else %}
+                        <span class="badge badge-success">آدرس فعال</span>
+                        {% endif %}
+                        <a href="{% url 'delete_address' addr.pk %}" class="btn" style="background: #dc3545; font-size: 0.8rem; padding: 0.3rem 0.6rem;">حذف</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p style="color: #888;">شما هنوز آدرسی ثبت نکرده‌اید.</p>
+                {% endfor %}
+            </div>
+
+            <details>
+                <summary style="cursor: pointer; color: var(--primary); font-weight: bold;">➕ افزودن آدرس جدید</summary>
+                <form action="{% url 'add_address' %}" method="post" style="margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    {% csrf_token %}
+                    <input type="text" name="title" placeholder="عنوان (مثلا خانه)" required class="form-control">
+                    <select name="city" class="form-control" required>
+                        <option value="تهران">تهران</option>
+                        <option value="شیراز">شیراز</option>
+                        <option value="اصفهان">اصفهان</option>
+                        <option value="مشهد">مشهد</option>
+                    </select>
+                    <textarea name="address_text" placeholder="آدرس دقیق" required class="form-control" style="grid-column: span 2;"></textarea>
+                    <input type="hidden" name="latitude" value="35.6892">
+                    <input type="hidden" name="longitude" value="51.3890">
+                    <button type="submit" class="btn" style="grid-column: span 2;">ذخیره آدرس</button>
+                </form>
+            </details>
+        </div>
 
         <div class="card">
             <h2>رستوران‌های برتر</h2>

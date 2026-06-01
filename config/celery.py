@@ -1,5 +1,5 @@
 """
-Celery configuration for SnapFood project.
+Celery configuration for DanialFood project.
 """
 
 import os

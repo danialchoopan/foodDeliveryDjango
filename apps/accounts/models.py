@@ -117,6 +117,36 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
 
+class Address(models.Model):
+    """
+    User delivery addresses
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
+    title = models.CharField(max_length=100, verbose_name='عنوان (مثلا خانه، محل کار)')
+    city = models.CharField(max_length=100, verbose_name='شهر')
+    address_text = models.TextField(verbose_name='آدرس دقیق')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی')
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی')
+    is_default = models.BooleanField(default=False, verbose_name='آدرس پیش‌فرض')
+    is_active = models.BooleanField(default=False, verbose_name='آدرس فعال فعلی')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'آدرس'
+        verbose_name_plural = 'آدرس‌ها'
+        ordering = ['-is_default', '-created_at']
+
+    def __str__(self):
+        return f"{self.title} - {self.city}"
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            Address.objects.filter(user=self.user, is_default=True).update(is_default=False)
+        if self.is_active:
+            Address.objects.filter(user=self.user, is_active=True).update(is_active=False)
+        super().save(*args, **kwargs)
+
+
 class UserOTP(models.Model):
     """
     OTP model for phone number verification (optional)

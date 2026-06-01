@@ -34,6 +34,7 @@ class Restaurant(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی')
     
     # Contact info
+    city = models.CharField(max_length=100, default='تهران', verbose_name='شهر')
     phone_number = models.CharField(max_length=15, verbose_name='شماره تلفن')
     logo = models.ImageField(upload_to='restaurant_logos/', null=True, blank=True)
     cover_image = models.ImageField(upload_to='restaurant_covers/', null=True, blank=True)

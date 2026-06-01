@@ -2,7 +2,19 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User, UserOTP
+from .models import User, UserOTP, Address
+
+class AddressSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Address model
+    """
+    class Meta:
+        model = Address
+        fields = [
+            'id', 'title', 'city', 'address_text', 'latitude', 'longitude',
+            'is_default', 'is_active', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
 
 class UserSerializer(serializers.ModelSerializer):
     """

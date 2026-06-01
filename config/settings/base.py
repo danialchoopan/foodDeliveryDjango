@@ -1,5 +1,5 @@
 """
-Django settings for SnapFood project.
+Django settings for DanialFood project.
 """
 
 from pathlib import Path
@@ -147,7 +147,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Only for development
 
 # Spectacular (Swagger) settings
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'SnapFood API',
+    'TITLE': 'DanialFood API',
     'DESCRIPTION': 'Restaurant & Delivery System API',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,

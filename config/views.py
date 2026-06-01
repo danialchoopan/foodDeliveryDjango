@@ -3,14 +3,49 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib import messages
-from apps.accounts.models import User
-from apps.restaurants.models import Restaurant, RestaurantReview, FavoriteRestaurant
-from apps.orders.models import Order
+from apps.accounts.models import User, Address
+from apps.restaurants.models import Restaurant, RestaurantReview, FavoriteRestaurant, MenuItem
+from apps.orders.models import Order, Cart, CartItem, OrderItem
 from django.utils import timezone
-from django.db.models import Sum, Avg
+from django.db.models import Sum, Avg, Q
 
 def index(request):
-    return render(request, 'index.html')
+    city = request.GET.get('city')
+    search = request.GET.get('search')
+
+    active_address = None
+    if request.user.is_authenticated:
+        active_address = Address.objects.filter(user=request.user, is_active=True).first()
+        if not city and active_address:
+            city = active_address.city
+
+    restaurants = Restaurant.objects.filter(is_active=True, is_verified=True)
+
+    # Filter by location if active address is set
+    if active_address and not request.GET.get('city'):
+        # Filter within a roughly 10km radius (approx 0.1 degree)
+        lat = float(active_address.latitude)
+        lng = float(active_address.longitude)
+        restaurants = restaurants.filter(
+            latitude__gte=lat - 0.1,
+            latitude__lte=lat + 0.1,
+            longitude__gte=lng - 0.1,
+            longitude__lte=lng + 0.1
+        )
+
+    if city:
+        restaurants = restaurants.filter(city=city)
+    if search:
+        restaurants = restaurants.filter(Q(name__icontains=search) | Q(cuisine_type__icontains=search))
+
+    cities = Restaurant.objects.values_list('city', flat=True).distinct()
+
+    return render(request, 'index.html', {
+        'restaurants': restaurants,
+        'cities': cities,
+        'current_city': city,
+        'active_address': active_address
+    })
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -78,14 +113,161 @@ def profile_view(request):
 
 @login_required
 def customer_dashboard(request):
+    active_address = Address.objects.filter(user=request.user, is_active=True).first()
+    city = request.GET.get('city') or (active_address.city if active_address else None)
+
     restaurants = Restaurant.objects.filter(is_active=True, is_verified=True)
+
+    if active_address and not request.GET.get('city'):
+        lat = float(active_address.latitude)
+        lng = float(active_address.longitude)
+        restaurants = restaurants.filter(
+            latitude__gte=lat - 0.1,
+            latitude__lte=lat + 0.1,
+            longitude__gte=lng - 0.1,
+            longitude__lte=lng + 0.1
+        )
+    elif city:
+        restaurants = restaurants.filter(city=city)
+
     orders = Order.objects.filter(customer=request.user).order_by('-created_at')
     favorites = FavoriteRestaurant.objects.filter(user=request.user).select_related('restaurant')
+    cities = Restaurant.objects.values_list('city', flat=True).distinct()
+    addresses = Address.objects.filter(user=request.user)
+
     return render(request, 'customer/dashboard.html', {
         'restaurants': restaurants,
         'orders': orders,
-        'favorites': favorites
+        'favorites': favorites,
+        'cities': cities,
+        'current_city': city,
+        'addresses': addresses,
+        'active_address': active_address
     })
+
+@login_required
+def add_address(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        city = request.POST.get('city')
+        address_text = request.POST.get('address_text')
+        lat = request.POST.get('latitude', 0)
+        lng = request.POST.get('longitude', 0)
+
+        is_first = not Address.objects.filter(user=request.user).exists()
+
+        Address.objects.create(
+            user=request.user,
+            title=title,
+            city=city,
+            address_text=address_text,
+            latitude=lat,
+            longitude=lng,
+            is_default=is_first,
+            is_active=is_first
+        )
+        messages.success(request, 'آدرس با موفقیت اضافه شد.')
+    return redirect('customer_dashboard')
+
+@login_required
+def delete_address(request, pk):
+    address = get_object_or_404(Address, pk=pk, user=request.user)
+    address.delete()
+    messages.success(request, 'آدرس حذف شد.')
+    return redirect('customer_dashboard')
+
+@login_required
+def set_active_address(request, pk):
+    address = get_object_or_404(Address, pk=pk, user=request.user)
+    Address.objects.filter(user=request.user).update(is_active=False)
+    address.is_active = True
+    address.save()
+    messages.success(request, f'آدرس فعال به {address.title} تغییر یافت.')
+    return redirect('customer_dashboard')
+
+@login_required
+def add_to_cart(request, item_id):
+    menu_item = get_object_or_404(MenuItem, id=item_id)
+    cart, _ = Cart.objects.get_or_create(customer=request.user)
+
+    # Check if adding item from a different restaurant
+    if cart.items.exists():
+        first_item = cart.items.first()
+        if first_item.menu_item.restaurant != menu_item.restaurant:
+            # For simplicity, we clear the cart if from a different restaurant
+            cart.items.all().delete()
+
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, menu_item=menu_item)
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect('restaurant_detail', pk=menu_item.restaurant.id)
+
+@login_required
+def cart_view(request):
+    cart, _ = Cart.objects.get_or_create(customer=request.user)
+    return render(request, 'cart.html', {'cart': cart})
+
+@login_required
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__customer=request.user)
+    cart_item.delete()
+    return redirect('cart_view')
+
+@login_required
+def checkout(request):
+    cart, _ = Cart.objects.get_or_create(customer=request.user)
+    if not cart.items.exists():
+        messages.error(request, "سبد خرید شما خالی است.")
+        return redirect('index')
+
+    addresses = Address.objects.filter(user=request.user)
+    active_address = addresses.filter(is_active=True).first() or addresses.filter(is_default=True).first()
+
+    if request.method == 'POST':
+        address_id = request.POST.get('address_id')
+        if address_id:
+            selected_address = get_object_or_404(Address, id=address_id, user=request.user)
+            address_text = selected_address.address_text
+            lat = selected_address.latitude
+            lng = selected_address.longitude
+        else:
+            address_text = request.POST.get('address')
+            lat = 0
+            lng = 0
+
+        restaurant = cart.items.first().menu_item.restaurant
+
+        # Create Order
+        order = Order.objects.create(
+            customer=request.user,
+            restaurant=restaurant,
+            delivery_address=address_text,
+            subtotal=cart.total,
+            total_amount=cart.total,
+            customer_latitude=lat,
+            customer_longitude=lng
+        )
+
+        # Create Order Items
+        for item in cart.items.all():
+            OrderItem.objects.create(
+                order=order,
+                menu_item=item.menu_item,
+                quantity=item.quantity,
+                price=item.menu_item.price,
+                item_name=item.menu_item.name,
+                item_description=item.menu_item.description
+            )
+
+        # Clear Cart
+        cart.items.all().delete()
+
+        messages.success(request, "سفارش شما با موفقیت ثبت شد.")
+        return redirect('customer_dashboard')
+
+    return render(request, 'checkout.html', {'cart': cart})
 
 @login_required
 def restaurant_detail(request, pk):

@@ -1,4 +1,4 @@
-# SnapFood API Documentation (READMEAPI)
+# DanialFood API Documentation (READMEAPI)
 
 این مستندات برای راهنمایی توسعه‌دهندگان اپلیکیشن اندروید و وب تهیه شده است. تمامی APIها با فرمت JSON کار می‌کنند و نیاز به توکن Bearer برای احراز هویت دارند (به جز موارد عمومی).
 
@@ -9,6 +9,10 @@
 - **ثبت نام**: `POST /api/auth/register/`
 - **ورود**: `POST /api/auth/login/`
 - **رفرش توکن**: `POST /api/auth/token/refresh/`
+- **مدیریت آدرس‌ها**:
+    - لیست آدرس‌ها: `GET /api/auth/addresses/`
+    - افزودن آدرس: `POST /api/auth/addresses/`
+    - فعال‌سازی آدرس برای فیلترینگ: `POST /api/auth/addresses/{id}/set-active/`
 
 **مثال ورود:**
 ```json

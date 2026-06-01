@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Docker entrypoint script for SnapFood
+# Docker entrypoint script for DanialFood
 
 set -e
 
