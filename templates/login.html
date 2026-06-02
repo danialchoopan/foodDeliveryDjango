@@ -16,6 +16,9 @@
 
     <form method="post">
         {% csrf_token %}
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         <div style="margin-bottom: 1rem;">
             <label style="display: block; margin-bottom: 0.5rem;">نام کاربری</label>
             <input type="text" name="username" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" required>
@@ -27,7 +30,7 @@
         <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">ورود</button>
     </form>
     <div style="margin-top: 1rem; text-align: center; font-size: 0.9rem;">
-        کاربر ندارید؟ <a href="/register" style="color: var(--primary);">ثبت نام کنید</a>
+        کاربر ندارید؟ <a href="{% url 'web_register' %}" style="color: var(--primary);">ثبت نام کنید</a>
     </div>
 </div>
 {% endblock %}

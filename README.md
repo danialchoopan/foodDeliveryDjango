@@ -93,6 +93,24 @@ python manage.py runserver
 
 ---
 
+## 📸 تصاویر برنامه (Screenshots)
+
+در اینجا نمایی از بخش‌های مختلف پنل وب دانیال فود را مشاهده می‌کنید:
+
+### ۱. صفحه اصلی و جستجوی رستوران‌ها
+![صفحه اصلی](danialfood_home.png)
+
+### ۲. صفحه ورود به سیستم
+![صفحه ورود](danialfood_login.png)
+
+### ۳. جزئیات رستوران و منو
+![جزئیات رستوران](danialfood_restaurant_detail.png)
+
+### ۴. پنل مدیریت کل سیستم (Admin)
+![پنل ادمین](danialfood_admin_dashboard.png)
+
+---
+
 ## 🛠 تکنولوژی‌های استفاده شده
 - **Back-end**: Django 4.2 & Django REST Framework
 - **Database**: SQLite (توسعه) / PostgreSQL (عملیاتی)

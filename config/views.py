@@ -59,7 +59,11 @@ def index(request):
     })
 
 def login_view(request):
+    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.user.is_authenticated:
+        if next_url:
+            return redirect(next_url)
         if request.user.is_staff or request.user.role == User.Role.ADMIN:
             return redirect('admin_dashboard')
         elif request.user.role == User.Role.RESTAURANT_OWNER:
@@ -73,6 +77,8 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
+            if next_url:
+                return redirect(next_url)
             if user.is_staff or user.role == User.Role.ADMIN:
                 return redirect('admin_dashboard')
             elif user.role == User.Role.RESTAURANT_OWNER:
@@ -81,7 +87,8 @@ def login_view(request):
                 return redirect('customer_dashboard')
         else:
             messages.error(request, 'نام کاربری یا رمز عبور اشتباه است.')
-    return render(request, 'login.html')
+
+    return render(request, 'login.html', {'next': next_url})
 
 def logout_view(request):
     auth_logout(request)
