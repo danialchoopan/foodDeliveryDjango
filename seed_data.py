@@ -97,11 +97,11 @@ def seed_data():
 
     # Create Restaurants
     restaurant_data = [
-        {"name": "پیتزا قصر", "city": "تهران"},
-        {"name": "برگر کینگ", "city": "تهران"},
-        {"name": "سوشی سنتر", "city": "شیراز"},
-        {"name": "کباب دانیال", "city": "اصفهان"},
-        {"name": "رستوران سنتی", "city": "مشهد"},
+        {"name": "پیتزا قصر", "city": "تهران", "type": Restaurant.CuisineType.FAST_FOOD},
+        {"name": "برگر کینگ", "city": "تهران", "type": Restaurant.CuisineType.FAST_FOOD},
+        {"name": "سوشی سنتر", "city": "شیراز", "type": Restaurant.CuisineType.JAPANESE},
+        {"name": "کباب دانیال", "city": "اصفهان", "type": Restaurant.CuisineType.PERSIAN},
+        {"name": "رستوران سنتی", "city": "مشهد", "type": Restaurant.CuisineType.PERSIAN},
     ]
     restaurants = []
     for i, data in enumerate(restaurant_data):
@@ -109,16 +109,20 @@ def seed_data():
             name=data["name"],
             defaults={
                 'owner': owners[i % len(owners)],
-                'address': f'Street {i+1}, {data["city"]}',
+                'address': f'خیابان اصلی، {data["city"]}',
                 'city': data["city"],
                 'phone_number': f'0218888000{i}',
-                'latitude': 35.7,
-                'longitude': 51.3,
+                'latitude': 35.7 + (i * 0.01),
+                'longitude': 51.3 + (i * 0.01),
+                'cuisine_type': data["type"],
                 'is_active': True,
                 'is_open': True,
                 'is_verified': True
             }
         )
+        if created or not res.is_verified:
+            res.is_verified = True
+            res.save()
         restaurants.append(res)
     print(f"{len(restaurants)} Restaurants created.")
 

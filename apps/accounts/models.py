@@ -30,14 +30,14 @@ class User(AbstractUser):
         decimal_places=6, 
         null=True, 
         blank=True,
-        verbose_name='طول جغرافیایی فعلی'
+        verbose_name='عرض جغرافیایی فعلی'
     )
     current_longitude = models.DecimalField(
         max_digits=9, 
         decimal_places=6, 
         null=True, 
         blank=True,
-        verbose_name='عرض جغرافیایی فعلی'
+        verbose_name='طول جغرافیایی فعلی'
     )
     last_location_update = models.DateTimeField(null=True, blank=True)
     
@@ -125,8 +125,8 @@ class Address(models.Model):
     title = models.CharField(max_length=100, verbose_name='عنوان (مثلا خانه، محل کار)')
     city = models.CharField(max_length=100, verbose_name='شهر')
     address_text = models.TextField(verbose_name='آدرس دقیق')
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی')
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی')
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی')
     is_default = models.BooleanField(default=False, verbose_name='آدرس پیش‌فرض')
     is_active = models.BooleanField(default=False, verbose_name='آدرس فعال فعلی')
     created_at = models.DateTimeField(auto_now_add=True)

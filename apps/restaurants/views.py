@@ -1,7 +1,8 @@
 from rest_framework import generics, viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from django.db.models import Q, F, Count, Avg
+from django.db import models
+from django.db.models import Q, F, Count, Avg, Sum
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from geopy.distance import distance
@@ -129,7 +130,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         total_orders = orders.count()
         completed_orders = orders.filter(status=Order.Status.DELIVERED).count()
         total_revenue = orders.filter(status=Order.Status.DELIVERED).aggregate(
-            total=models.Sum('total_amount')
+            total=Sum('total_amount')
         )['total'] or 0
         
         return Response({
