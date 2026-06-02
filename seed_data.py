@@ -7,7 +7,7 @@ from datetime import timedelta
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
 django.setup()
 
-from apps.accounts.models import User
+from apps.accounts.models import User, Address
 from apps.restaurants.models import Restaurant, MenuCategory, MenuItem, RestaurantReview, FavoriteRestaurant
 from apps.orders.models import Order, OrderItem
 from apps.delivery.models import DeliveryZone, PeakTimeSetting
@@ -60,6 +60,18 @@ def seed_data():
         if created:
             customer.set_password('customer123')
             customer.save()
+
+            # Add a sample address for each customer
+            Address.objects.create(
+                user=customer,
+                title='خانه',
+                city='تهران' if i % 2 == 0 else 'شیراز',
+                address_text=f'خیابان {i}، پلاک {i*10}',
+                latitude=35.7 + (i * 0.01),
+                longitude=51.3 + (i * 0.01),
+                is_default=True,
+                is_active=True
+            )
         customers.append(customer)
     print(f"{len(customers)} Customers created.")
 
@@ -84,14 +96,21 @@ def seed_data():
     print(f"{len(riders)} Riders created.")
 
     # Create Restaurants
-    restaurant_names = ["Pizza Palace", "Burger King", "Sushi Central"]
+    restaurant_data = [
+        {"name": "پیتزا قصر", "city": "تهران"},
+        {"name": "برگر کینگ", "city": "تهران"},
+        {"name": "سوشی سنتر", "city": "شیراز"},
+        {"name": "کباب دانیال", "city": "اصفهان"},
+        {"name": "رستوران سنتی", "city": "مشهد"},
+    ]
     restaurants = []
-    for i, name in enumerate(restaurant_names):
+    for i, data in enumerate(restaurant_data):
         res, created = Restaurant.objects.get_or_create(
-            name=name,
+            name=data["name"],
             defaults={
                 'owner': owners[i % len(owners)],
-                'address': f'Street {i+1}, Tehran',
+                'address': f'Street {i+1}, {data["city"]}',
+                'city': data["city"],
                 'phone_number': f'0218888000{i}',
                 'latitude': 35.7,
                 'longitude': 51.3,

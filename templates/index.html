@@ -1,22 +1,137 @@
 {% extends 'base.html' %}
 
-{% block title %}اسنپ فود | سامانه سفارش آنلاین غذا{% endblock %}
+{% block title %}دانیال فود | سامانه سفارش آنلاین غذا{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 6rem 2rem;
+        text-align: center;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+    }
+    .search-box {
+        background: white;
+        padding: 0.5rem;
+        border-radius: 15px;
+        display: inline-flex;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .search-box input {
+        flex: 1;
+        border: none;
+        padding: 1rem;
+        font-size: 1.1rem;
+        outline: none;
+    }
+    .filter-section {
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+    }
+    .filter-chip {
+        padding: 0.5rem 1.5rem;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        text-decoration: none;
+        color: var(--secondary);
+        white-space: nowrap;
+        transition: all 0.3s;
+    }
+    .filter-chip.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .res-card {
+        transition: transform 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+    }
+    .res-card:hover {
+        transform: translateY(-5px);
+    }
+    .res-image {
+        height: 180px;
+        background: #eee;
+        border-radius: 12px 12px 0 0;
+        margin: -1.5rem -1.5rem 1rem -1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div style="text-align: center; padding: 4rem 0;">
-    <h1 style="font-size: 3rem; color: var(--primary);">تجربه غذای لذیذ با اسنپ فود</h1>
-    <p style="font-size: 1.2rem; color: #666;">سفارش آنلاین از بهترین رستوران‌ها و فست‌فودهای اطراف شما</p>
-    <div style="margin-top: 2rem;">
-        {% if user.is_authenticated %}
-            <a href="{% url 'customer_dashboard' %}" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">ورود به پنل کاربری</a>
-        {% else %}
-            <a href="{% url 'web_login' %}" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; margin-left: 1rem;">ورود کاربران</a>
-            <a href="/register" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; background-color: var(--secondary);">ثبت‌نام پیک و رستوران</a>
-        {% endif %}
+<div class="hero">
+    <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">دانیال فود</h1>
+    <p style="font-size: 1.5rem; margin-bottom: 2.5rem;">سفارش آنلاین غذا از بهترین رستوران‌های شهر شما</p>
+
+    <form action="{% url 'index' %}" method="get" class="search-box">
+        {% if current_city %}<input type="hidden" name="city" value="{{ current_city }}">{% endif %}
+        {% if current_cuisine %}<input type="hidden" name="cuisine" value="{{ current_cuisine }}">{% endif %}
+        <input type="text" name="search" placeholder="جستجوی رستوران یا نوع غذا..." value="{{ request.GET.search|default:'' }}">
+        <button type="submit" class="btn" style="padding: 0 2.5rem;">جستجو</button>
+    </form>
+
+    {% if active_address %}
+    <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.2); display: inline-block; padding: 0.5rem 1.5rem; border-radius: 30px; backdrop-filter: blur(5px);">
+        📍 ارسال به: <strong>{{ active_address.title }} ({{ active_address.city }})</strong>
+        <a href="{% url 'customer_dashboard' %}" style="color: white; margin-right: 1rem; font-size: 0.8rem; text-decoration: underline;">تغییر آدرس</a>
     </div>
+    {% endif %}
 </div>
 
+<div class="filter-section">
+    <a href="{% url 'index' %}{% if current_cuisine %}?cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if not current_city %}active{% endif %}">همه شهرها</a>
+    {% for city in cities %}
+    <a href="{% url 'index' %}?city={{ city }}{% if current_cuisine %}&cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if current_city == city %}active{% endif %}">{{ city }}</a>
+    {% endfor %}
+</div>
+
+<div class="filter-section" style="margin-top: -1rem;">
+    <a href="{% url 'index' %}{% if current_city %}?city={{ current_city }}{% endif %}" class="filter-chip {% if not current_cuisine %}active{% endif %}">همه دسته‌ها</a>
+    {% for val, label in cuisines %}
+    <a href="{% url 'index' %}?cuisine={{ val }}{% if current_city %}&city={{ current_city }}{% endif %}" class="filter-chip {% if current_cuisine == val %}active{% endif %}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+<h2>رستوران‌های فعال {% if current_city %}در {{ current_city }}{% endif %}</h2>
+
 <div class="grid">
+    {% for res in restaurants %}
+    <a href="{% url 'restaurant_detail' res.pk %}" class="card res-card">
+        <div class="res-image">🍕</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0;">{{ res.name }}</h3>
+            <span style="color: #ffc107;">⭐️ {{ res.average_rating|floatformat:1 }}</span>
+        </div>
+        <p style="color: #666; margin: 0.5rem 0;">{{ res.get_cuisine_type_display }} • {{ res.city }}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+            <span style="color: #888; font-size: 0.9rem;">{{ res.delivery_time }} دقیقه</span>
+            <span class="badge badge-success">باز است</span>
+        </div>
+    </a>
+    {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+        <p style="font-size: 1.2rem; color: #888;">متأسفانه رستورانی با این مشخصات یافت نشد.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="grid" style="margin-top: 4rem;">
     <div class="card" style="text-align: center;">
         <div style="font-size: 3rem; margin-bottom: 1rem;">🍕</div>
         <h3>تنوع بی‌نظیر</h3>

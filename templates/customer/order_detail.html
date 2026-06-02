@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}جزئیات سفارش #{{ order.order_number }} | دانیال فود{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tracking-container {
+        margin: 2rem 0;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 15px;
+    }
+    .progress-bar-container {
+        height: 10px;
+        background: #e9ecef;
+        border-radius: 5px;
+        margin: 2rem 0;
+        position: relative;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 5px;
+        transition: width 0.5s ease-in-out;
+    }
+    .status-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-top: -1.5rem;
+    }
+    .step {
+        text-align: center;
+        width: 20%;
+        position: relative;
+    }
+    .step-icon {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+        z-index: 1;
+        position: relative;
+    }
+    .step.active .step-icon {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+    .step.completed .step-icon {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>سفارش #{{ order.order_number }}</h1>
+        <a href="{% url 'customer_dashboard' %}" class="btn" style="background: #6c757d;">بازگشت به پنل</a>
+    </div>
+
+    <div class="tracking-container">
+        <h3>وضعیت سفارش: {{ order.get_status_display }}</h3>
+
+        {% if order.status != 'cancelled' and order.status != 'rejected' %}
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{ progress }}%;"></div>
+        </div>
+        <div class="status-steps">
+            <div class="step {% if progress >= 10 %}completed{% endif %}">
+                <div class="step-icon">📝</div>
+                <span>ثبت شده</span>
+            </div>
+            <div class="step {% if progress >= 25 %}completed{% endif %}">
+                <div class="step-icon">✅</div>
+                <span>تایید</span>
+            </div>
+            <div class="step {% if progress >= 50 %}completed{% endif %}">
+                <div class="step-icon">🍳</div>
+                <span>آماده‌سازی</span>
+            </div>
+            <div class="step {% if progress >= 90 %}completed{% endif %}">
+                <div class="step-icon">🚴</div>
+                <span>ارسال</span>
+            </div>
+            <div class="step {% if progress >= 100 %}completed{% endif %}">
+                <div class="step-icon">🎁</div>
+                <span>تحویل</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="card" style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; text-align: center; margin-top: 1rem;">
+            <h2>این سفارش {{ order.get_status_display }} است.</h2>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>آیتم‌های سفارش</h3>
+            <ul style="list-style: none; padding: 0;">
+                {% for item in order.items.all %}
+                <li style="display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #eee;">
+                    <span>{{ item.quantity }}x {{ item.item_name }}</span>
+                    <span>{{ item.total }} تومان</span>
+                </li>
+                {% endfor %}
+            </ul>
+            <div style="margin-top: 1.5rem; text-align: left; font-weight: bold; font-size: 1.2rem;">
+                جمع کل: {{ order.total_amount }} تومان
+            </div>
+        </div>
+        <div class="card">
+            <h3>اطلاعات ارسال</h3>
+            <p><strong>رستوران:</strong> {{ order.restaurant.name }}</p>
+            <p><strong>آدرس:</strong> {{ order.delivery_address }}</p>
+            <p><strong>تاریخ ثبت:</strong> {{ order.created_at|date:"Y/m/d H:i" }}</p>
+            {% if order.rider %}
+            <p><strong>پیک:</strong> {{ order.rider.get_full_name|default:order.rider.username }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

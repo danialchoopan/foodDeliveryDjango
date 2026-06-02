@@ -1,7 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import User, UserOTP
+from .models import User, UserOTP, Address
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'city', 'is_default', 'is_active', 'created_at')
+    list_filter = ('city', 'is_default', 'is_active')
+    search_fields = ('user__username', 'title', 'address_text')
 
 
 class CustomUserAdmin(UserAdmin):

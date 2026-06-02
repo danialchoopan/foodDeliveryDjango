@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}اسنپ فود{% endblock %}</title>
+    <title>{% block title %}دانیال فود{% endblock %}</title>
     <style>
         :root {
             --primary: #ff00a6;
@@ -121,9 +121,14 @@
 </head>
 <body>
     <header>
-        <a href="{% url 'index' %}" class="logo">SnapFood</a>
+        <a href="{% url 'index' %}" class="logo">DanialFood</a>
         <nav>
             {% if user.is_authenticated %}
+                {% if user.role == 'customer' %}
+                <a href="{% url 'cart_view' %}" style="position: relative; margin-left: 1.5rem;">
+                    🛒 سبد خرید
+                </a>
+                {% endif %}
                 <a href="{% url 'profile' %}">پروفایل</a>
                 <span>خوش آمدید، {{ user.username }}</span>
                 <a href="{% url 'web_logout' %}" class="btn">خروج</a>
@@ -139,7 +144,7 @@
     </div>
 
     <footer>
-        <p>&copy; ۲۰۲۴ سامانه سفارش غذای اسنپ فود</p>
+        <p>&copy; ۲۰۲۴ سامانه سفارش غذای دانیال فود</p>
     </footer>
 </body>
 </html>

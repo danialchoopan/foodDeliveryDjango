@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ restaurant.name }} | اسنپ فود{% endblock %}
+{% block title %}{{ restaurant.name }} | دانیال فود{% endblock %}
 
 {% block content %}
 <div class="card">
@@ -32,7 +32,7 @@
                         <p style="color: #888; font-size: 0.9rem; margin: 0.5rem 0;">{{ item.description }}</p>
                         <strong style="color: var(--primary);">{{ item.price }} تومان</strong>
                     </div>
-                    <button class="btn" style="height: fit-content;">+ افزودن</button>
+                    <a href="{% url 'add_to_cart' item.id %}" class="btn" style="height: fit-content; text-decoration: none;">+ افزودن</a>
                 </div>
             {% endfor %}
         </div>

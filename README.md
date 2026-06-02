@@ -1,82 +1,100 @@
-# 🍔 SnapFood - Food Delivery System (Restaurant & Delivery)
+# 🍔 دانیال فود - سامانه هوشمند سفارش غذا
 
-SnapFood is an advanced food delivery system with multi-role capabilities, geolocation tracking, and dynamic pricing. This project includes both a powerful REST API and a simplified Web Panel for Customers, Restaurant Owners, and Admins.
+دانیال فود یک سیستم پیشرفته برای مدیریت رستوران و تحویل غذا است که با قابلیت‌های چند‌نقشی (مشتری، صاحب رستوران، پیک و مدیر)، ردیابی موقعیت جغرافیایی و قیمت‌گذاری پویا طراحی شده است. این پروژه شامل یک پنل وب کامل و رابط برنامه‌نویسی (API) برای اتصال به اپلیکیشن‌های موبایل است.
 
 ---
 
-## 🚀 Getting Started
+## 🛠 ساختار پروژه
 
-Follow these steps to set up and run the project on your local machine.
+این برنامه با استفاده از فریم‌ورک **Django** توسعه یافته و از بخش‌های اصلی زیر تشکیل شده است:
 
-### 1. Prerequisites
-- Python 3.11+
-- Virtual environment (recommended)
+### ۱. بخش حساب‌های کاربری (Accounts)
+- مدیریت کاربران در ۴ نقش: مشتری، صاحب رستوران، پیک و مدیر سیستم.
+- سیستم مدیریت آدرس‌های متعدد برای مشتریان.
+- احراز هویت دوگانه (Session برای وب و JWT برای اپلیکیشن موبایل).
 
-### 2. Installation
+### ۲. بخش رستوران‌ها (Restaurants)
+- مدیریت رستوران‌ها، منوها و دسته‌بندی غذاها.
+- سیستم فیلترینگ هوشمند بر اساس شهر و فاصله جغرافیایی (شعاع ۱۰ کیلومتری).
+- قابلیت ثبت نظر و امتیازدهی توسط مشتریان.
+- لیست علاقه‌مندی‌ها.
+
+### ۳. بخش سفارشات (Orders)
+- مدیریت سبد خرید و فرآیند تسویه‌حساب.
+- تولید شماره سفارش منحصر‌به‌فرد.
+- پیگیری وضعیت سفارش به صورت بصری (Visual Tracking).
+
+### ۴. بخش تحویل (Delivery)
+- مدیریت پیک‌ها و تخصیص سفارش.
+- پیگیری زنده موقعیت پیک (آماده برای اتصال به نقشه).
+
+---
+
+## 🚀 راه‌اندازی پروژه
+
+برای اجرای پروژه روی سیستم خود، مراحل زیر را دنبال کنید:
+
+### ۱. پیش‌نیازها
+- Python 3.11 یا بالاتر
+
+### ۲. نصب و تنظیمات
 ```bash
-# Clone the repository
+# کلون کردن مخزن
 git clone https://github.com/yourusername/snapfood.git
 cd snapfood
 
-# Create and activate virtual environment
+# ایجاد محیط مجازی و فعال‌سازی آن
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # در ویندوز: venv\Scripts\activate
 
-# Install dependencies
+# نصب وابستگی‌ها
 pip install -r requirements/base.txt
 pip install -r requirements/dev.txt
 ```
 
-### 3. Configuration
-Copy the example environment file and adjust if necessary:
-```bash
-cp .env.example .env
-```
-*Note: The project is pre-configured to use SQLite for easy local setup.*
-
-### 4. Database Setup & Migrations
+### ۳. تنظیمات پایگاه داده و مهاجرت‌ها
 ```bash
 python manage.py makemigrations accounts restaurants orders delivery
 python manage.py migrate
 ```
 
-### 5. Seed Initial Data
-Run the following script to create sample users (Admin, Customers, Owners, Riders), restaurants, and menus:
+### ۴. ایجاد داده‌های اولیه (Seed Data)
+برای تست برنامه با داده‌های نمونه (رستوران‌ها، کاربران و منوها)، دستور زیر را اجرا کنید:
 ```bash
 python seed_data.py
 ```
 
-### 6. Run the Server
+### ۵. اجرای سرور
 ```bash
 python manage.py runserver
 ```
-- **Web Panels**: [http://localhost:8000](http://localhost:8000)
-- **Admin Panel**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
-- **API Documentation**: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/)
+- **پنل وب**: [http://localhost:8000](http://localhost:8000)
+- **پنل مدیریت جنگو**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+- **مستندات API**: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/)
 
 ---
 
-## 👥 User Roles & Features
+## 👥 نقش‌های کاربری و دسترسی‌ها
 
-| Role | Key Features |
+| نقش | قابلیت‌های کلیدی |
 |------|--------------|
-| **Customer** | Browse restaurants, Favorite shops, Order food, Rate & Review, Track deliveries. |
-| **Restaurant Owner**| Manage Menu (Categories/Items), View orders, Sales reports, Toggle open status. |
-| **Delivery Rider** | Accept nearby orders, Update live location, Update delivery status. |
-| **Admin** | Full system overview, Verify new restaurants, Manage users and zones. |
+| **مشتری** | جستجوی رستوران، فیلتر دسته‌بندی، ثبت سفارش، مدیریت آدرس، پیگیری سفارش. |
+| **صاحب رستوران**| مدیریت منو (غذاها و دسته‌ها)، مشاهده سفارشات جاری، گزارش فروش روزانه. |
+| **پیک** | مشاهده سفارشات نزدیک، به‌روزرسانی وضعیت ارسال. |
+| **مدیر (Admin)** | نظارت بر کل سیستم، تایید رستوران‌های جدید، مدیریت کاربران. |
 
 ---
 
-## 📖 API Documentation
+## 📖 راهنمای اتصال به اپلیکیشن (API)
 
-For detailed information on how to connect your Android application to this backend, please refer to the dedicated API guide:
+اگر قصد دارید اپلیکیشن اندروید یا iOS خود را به این بک‌ند متصل کنید، مستندات کامل فارسی را در فایل زیر بخوانید:
 
-👉 **[READMEAPI.md (Persian)](READMEAPI.md)**
+👉 **[READMEAPI.md (مستندات فارسی API)](READMEAPI.md)**
 
 ---
 
-## 🛠 Tech Stack
-- **Backend**: Django 4.2 & Django REST Framework
-- **Database**: SQLite (Dev) / PostgreSQL (Prod)
+## 🛠 تکنولوژی‌های استفاده شده
+- **Back-end**: Django 4.2 & Django REST Framework
+- **Database**: SQLite (توسعه) / PostgreSQL (عملیاتی)
 - **Auth**: JWT & Session-based
-- **Styling**: Plain HTML/CSS (Responsive & RTL support)
+- **UI**: Plain HTML/CSS (کاملاً پاسخگو و راست‌چین شده)

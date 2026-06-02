@@ -1,5 +1,5 @@
 """
-Production settings for SnapFood project.
+Production settings for DanialFood project.
 """
 
 from .base import *

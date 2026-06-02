@@ -111,11 +111,11 @@ class Order(models.Model):
         super().save(*args, **kwargs)
     
     def generate_order_number(self):
-        """Generate unique order number: SNF + YYMMDD + random 4 digits"""
+        """Generate unique order number: DNF + YYMMDD + random 4 digits"""
         import random
         date_part = timezone.now().strftime('%y%m%d')
         random_part = str(random.randint(1000, 9999))
-        return f"SNF{date_part}{random_part}"
+        return f"DNF{date_part}{random_part}"
     
     def can_cancel(self):
         """Check if order can be cancelled"""

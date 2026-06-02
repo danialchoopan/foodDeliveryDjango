@@ -1,5 +1,5 @@
 """
-URL configuration for SnapFood project.
+URL configuration for DanialFood project.
 """
 from django.contrib import admin
 from django.urls import path, include
@@ -18,6 +18,14 @@ urlpatterns = [
     path('restaurant/<int:pk>/', views.restaurant_detail, name='restaurant_detail'),
     path('restaurant/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('dashboard/customer/', views.customer_dashboard, name='customer_dashboard'),
+    path('address/add/', views.add_address, name='add_address'),
+    path('address/delete/<int:pk>/', views.delete_address, name='delete_address'),
+    path('address/set-active/<int:pk>/', views.set_active_address, name='set_active_address'),
+    path('cart/', views.cart_view, name='cart_view'),
+    path('cart/add/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('order/<int:pk>/', views.order_detail, name='order_detail'),
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
     path('dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),
 

@@ -1,15 +1,16 @@
 from rest_framework import generics, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import update_session_auth_hash
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
-from .models import User
+from .models import User, Address
 from .serializers import (
     RegisterSerializer, LoginSerializer, TokenSerializer, UserSerializer,
     ChangePasswordSerializer, UpdateProfileSerializer, RiderLocationSerializer,
-    RiderStatusSerializer
+    RiderStatusSerializer, AddressSerializer
 )
 from .permissions import IsOwnerOrAdmin, IsDeliveryRider, IsAdminUser
 
@@ -239,3 +240,45 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class AddressViewSet(viewsets.ModelViewSet):
+    """
+    Manage user addresses
+    """
+    serializer_class = AddressSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        is_first = not Address.objects.filter(user=self.request.user).exists()
+        serializer.save(user=self.request.user, is_default=is_first, is_active=is_first)
+
+    @extend_schema(
+        summary="لیست آدرس‌های کاربر",
+        responses={200: AddressSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema(
+        summary="افزودن آدرس جدید",
+        responses={201: AddressSerializer}
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(
+        summary="فعال‌سازی آدرس",
+        description="تنظیم یک آدرس به عنوان آدرس فعال فعلی برای فیلترینگ رستوران‌ها",
+        responses={200: AddressSerializer}
+    )
+    @action(detail=True, methods=['post'], url_path='set-active')
+    def set_active(self, request, pk=None):
+        address = self.get_object()
+        Address.objects.filter(user=request.user).update(is_active=False)
+        address.is_active = True
+        address.save()
+        return Response(AddressSerializer(address).data)
