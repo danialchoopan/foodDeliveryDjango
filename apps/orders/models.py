@@ -54,8 +54,8 @@ class Order(models.Model):
     
     # Address
     delivery_address = models.TextField(verbose_name='آدرس تحویل')
-    customer_latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی مشتری')
-    customer_longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی مشتری')
+    customer_latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی مشتری')
+    customer_longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی مشتری')
     
     # Status
     status = models.CharField(
