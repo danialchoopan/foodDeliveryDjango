@@ -30,8 +30,8 @@ class Restaurant(models.Model):
     
     # Location fields
     address = models.TextField(verbose_name='آدرس')
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی')
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='عرض جغرافیایی')
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='طول جغرافیایی')
     
     # Contact info
     city = models.CharField(max_length=100, default='تهران', verbose_name='شهر')

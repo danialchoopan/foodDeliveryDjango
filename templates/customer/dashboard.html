@@ -109,7 +109,7 @@
                 <tbody>
                     {% for order in orders %}
                     <tr>
-                        <td>#{{ order.order_number }}</td>
+                        <td><a href="{% url 'order_detail' order.pk %}" style="color: var(--primary); font-weight: bold; text-decoration: none;">#{{ order.order_number }}</a></td>
                         <td>{{ order.restaurant.name }}</td>
                         <td>{{ order.created_at|date:"Y/m/d" }}</td>
                         <td>{{ order.total_amount }} تومان</td>

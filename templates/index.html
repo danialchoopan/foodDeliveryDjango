@@ -81,6 +81,7 @@
 
     <form action="{% url 'index' %}" method="get" class="search-box">
         {% if current_city %}<input type="hidden" name="city" value="{{ current_city }}">{% endif %}
+        {% if current_cuisine %}<input type="hidden" name="cuisine" value="{{ current_cuisine }}">{% endif %}
         <input type="text" name="search" placeholder="جستجوی رستوران یا نوع غذا..." value="{{ request.GET.search|default:'' }}">
         <button type="submit" class="btn" style="padding: 0 2.5rem;">جستجو</button>
     </form>
@@ -94,9 +95,16 @@
 </div>
 
 <div class="filter-section">
-    <a href="{% url 'index' %}" class="filter-chip {% if not current_city %}active{% endif %}">همه شهرها</a>
+    <a href="{% url 'index' %}{% if current_cuisine %}?cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if not current_city %}active{% endif %}">همه شهرها</a>
     {% for city in cities %}
-    <a href="{% url 'index' %}?city={{ city }}" class="filter-chip {% if current_city == city %}active{% endif %}">{{ city }}</a>
+    <a href="{% url 'index' %}?city={{ city }}{% if current_cuisine %}&cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if current_city == city %}active{% endif %}">{{ city }}</a>
+    {% endfor %}
+</div>
+
+<div class="filter-section" style="margin-top: -1rem;">
+    <a href="{% url 'index' %}{% if current_city %}?city={{ current_city }}{% endif %}" class="filter-chip {% if not current_cuisine %}active{% endif %}">همه دسته‌ها</a>
+    {% for val, label in cuisines %}
+    <a href="{% url 'index' %}?cuisine={{ val }}{% if current_city %}&city={{ current_city }}{% endif %}" class="filter-chip {% if current_cuisine == val %}active{% endif %}">{{ label }}</a>
     {% endfor %}
 </div>
 

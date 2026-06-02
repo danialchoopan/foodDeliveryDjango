@@ -12,6 +12,7 @@ from django.db.models import Sum, Avg, Q
 def index(request):
     city = request.GET.get('city')
     search = request.GET.get('search')
+    cuisine = request.GET.get('cuisine')
 
     active_address = None
     if request.user.is_authenticated:
@@ -35,15 +36,25 @@ def index(request):
 
     if city:
         restaurants = restaurants.filter(city=city)
+    if cuisine:
+        restaurants = restaurants.filter(cuisine_type=cuisine)
     if search:
-        restaurants = restaurants.filter(Q(name__icontains=search) | Q(cuisine_type__icontains=search))
+        restaurants = restaurants.filter(
+            Q(name__icontains=search) |
+            Q(cuisine_type__icontains=search) |
+            Q(menu_items__name__icontains=search) |
+            Q(menu_items__description__icontains=search)
+        ).distinct()
 
     cities = Restaurant.objects.values_list('city', flat=True).distinct()
+    cuisines = Restaurant.CuisineType.choices
 
     return render(request, 'index.html', {
         'restaurants': restaurants,
         'cities': cities,
+        'cuisines': cuisines,
         'current_city': city,
+        'current_cuisine': cuisine,
         'active_address': active_address
     })
 
@@ -214,6 +225,28 @@ def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__customer=request.user)
     cart_item.delete()
     return redirect('cart_view')
+
+@login_required
+def order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk, customer=request.user)
+
+    # Progress percentage based on status
+    status_map = {
+        Order.Status.PENDING: 10,
+        Order.Status.CONFIRMED: 25,
+        Order.Status.PREPARING: 50,
+        Order.Status.READY: 75,
+        Order.Status.DELIVERING: 90,
+        Order.Status.DELIVERED: 100,
+        Order.Status.CANCELLED: 0,
+        Order.Status.REJECTED: 0,
+    }
+    progress = status_map.get(order.status, 0)
+
+    return render(request, 'customer/order_detail.html', {
+        'order': order,
+        'progress': progress
+    })
 
 @login_required
 def checkout(request):
