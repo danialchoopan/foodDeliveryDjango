@@ -30,6 +30,25 @@
 
 ---
 
+## 📸 تصاویر برنامه (Screenshots)
+
+در اینجا نمایی از بخش‌های مختلف پنل وب دانیال فود را مشاهده می‌کنید:
+
+### ۱. صفحه اصلی و جستجوی رستوران‌ها
+![صفحه اصلی](danialfood_home.png)
+
+### ۲. صفحه ورود به سیستم
+![صفحه ورود](danialfood_login.png)
+
+### ۳. جزئیات رستوران و منو
+![جزئیات رستوران](danialfood_restaurant_detail.png)
+
+### ۴. پنل مدیریت کل سیستم (Admin)
+![پنل ادمین](danialfood_admin_dashboard.png)
+
+---
+
+
 ## 🚀 راه‌اندازی پروژه
 
 برای اجرای پروژه روی سیستم خود، مراحل زیر را دنبال کنید:
@@ -40,8 +59,8 @@
 ### ۲. نصب و تنظیمات
 ```bash
 # کلون کردن مخزن
-git clone https://github.com/yourusername/snapfood.git
-cd snapfood
+git clone https://github.com/danialchoopan/foodDeliveryDjango.git
+cd foodDeliveryDjango
 
 # ایجاد محیط مجازی و فعال‌سازی آن
 python -m venv venv
@@ -90,26 +109,6 @@ python manage.py runserver
 اگر قصد دارید اپلیکیشن اندروید یا iOS خود را به این بک‌ند متصل کنید، مستندات کامل فارسی را در فایل زیر بخوانید:
 
 👉 **[READMEAPI.md (مستندات فارسی API)](READMEAPI.md)**
-
----
-
-## 📸 تصاویر برنامه (Screenshots)
-
-در اینجا نمایی از بخش‌های مختلف پنل وب دانیال فود را مشاهده می‌کنید:
-
-### ۱. صفحه اصلی و جستجوی رستوران‌ها
-![صفحه اصلی](danialfood_home.png)
-
-### ۲. صفحه ورود به سیستم
-![صفحه ورود](danialfood_login.png)
-
-### ۳. جزئیات رستوران و منو
-![جزئیات رستوران](danialfood_restaurant_detail.png)
-
-### ۴. پنل مدیریت کل سیستم (Admin)
-![پنل ادمین](danialfood_admin_dashboard.png)
-
----
 
 ## 🛠 تکنولوژی‌های استفاده شده
 - **Back-end**: Django 4.2 & Django REST Framework
