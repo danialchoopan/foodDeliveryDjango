@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}دسترسی محدود - دانیال فود{% endblock %}
+{% block title %}{% trans "Access Denied" %} | {% trans "DanialFood" %}{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 600px; margin: 4rem auto; text-align: center;">
+<div class="card text-center" style="max-width: 600px; margin: 4rem auto;">
     <h1 style="font-size: 5rem; color: var(--primary); margin: 0;">403</h1>
-    <h2 style="margin-bottom: 2rem;">دسترسی غیرمجاز</h2>
-    <p style="color: #666; margin-bottom: 2rem;">شما اجازه دسترسی به این صفحه را ندارید.</p>
-    <a href="{% url 'index' %}" class="btn">بازگشت به صفحه اصلی</a>
+    <h2 class="mb-3">{% trans "Access Denied" %}</h2>
+    <p class="text-light mb-3">{% trans "You do not have permission to access this page." %}</p>
+    <a href="{% url 'index' %}" class="btn">{% trans "Return to homepage" %}</a>
 </div>
 {% endblock %}

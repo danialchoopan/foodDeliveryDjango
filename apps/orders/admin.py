@@ -136,7 +136,7 @@ class OrderAdmin(admin.ModelAdmin):
     mark_as_delivered.short_description = 'تحویل سفارش‌های انتخاب شده'
     
     def cancel_orders(self, request, queryset):
-        from ..services import OrderCancellationService
+        from .services import OrderCancellationService
         success_count = 0
         for order in queryset.filter(status__in=['pending', 'confirmed']):
             success, _ = OrderCancellationService.cancel_order_with_lock(order.id, request.user)

@@ -111,11 +111,16 @@ class Order(models.Model):
         super().save(*args, **kwargs)
     
     def generate_order_number(self):
-        """Generate unique order number: DNF + YYMMDD + random 4 digits"""
+        """Generate unique order number: DNF + YYMMDD + random 4 digits with retry."""
         import random
         date_part = timezone.now().strftime('%y%m%d')
-        random_part = str(random.randint(1000, 9999))
-        return f"DNF{date_part}{random_part}"
+        for _ in range(10):
+            random_part = str(random.randint(1000, 9999))
+            order_number = f"DNF{date_part}{random_part}"
+            if not Order.objects.filter(order_number=order_number).exists():
+                return order_number
+        # Fallback: use timestamp-based number
+        return f"DNF{date_part}{timezone.now().strftime('%H%M%S')}"
     
     def can_cancel(self):
         """Check if order can be cancelled"""
@@ -198,11 +203,19 @@ class Cart(models.Model):
     
     @property
     def total(self):
-        return sum(item.total for item in self.items.all())
+        from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+        result = self.items.aggregate(
+            total=Sum(F('menu_item__price') * F('quantity'), output_field=DecimalField())
+        )
+        return result['total'] or 0
     
     @property
     def items_count(self):
         return self.items.count()
+
+    @property
+    def items_summary(self):
+        return self.items.select_related('menu_item').all()
     
     def clear(self):
         self.items.all().delete()

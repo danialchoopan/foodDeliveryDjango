@@ -152,9 +152,9 @@ class RiderLocationSerializer(serializers.Serializer):
         lat = float(attrs['latitude'])
         lng = float(attrs['longitude'])
         if lat < 25 or lat > 40:
-            raise serializers.ValidationError("طول جغرافیایی نامعتبر است.")
-        if lng < 44 or lng > 64:
             raise serializers.ValidationError("عرض جغرافیایی نامعتبر است.")
+        if lng < 44 or lng > 64:
+            raise serializers.ValidationError("طول جغرافیایی نامعتبر است.")
         return attrs
 
 

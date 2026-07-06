@@ -1,0 +1,489 @@
+# Persian (Farsi) translation for DanialFood
+# Copyright (C) 2024
+# This file is distributed under the same license as the DanialFood project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DanialFood 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"RTL-Direction: true\n"
+
+msgid "DanialFood"
+msgstr "دانیال فود"
+
+msgid "DanialFood | Online Food Ordering"
+msgstr "دانیال فود | سامانه سفارش آنلاین غذا"
+
+msgid "Order food online from the best restaurants in your city"
+msgstr "سفارش آنلاین غذا از بهترین رستوران‌های شهر شما"
+
+msgid "Search"
+msgstr "جستجو"
+
+msgid "Search restaurant or food type..."
+msgstr "جستجوی رستوران یا نوع غذا..."
+
+msgid "Deliver to:"
+msgstr "ارسال به:"
+
+msgid "Change address"
+msgstr "تغییر آدرس"
+
+msgid "All cities"
+msgstr "همه شهرها"
+
+msgid "All categories"
+msgstr "همه دسته‌ها"
+
+msgid "Active Restaurants"
+msgstr "رستوران‌های فعال"
+
+msgid "in"
+msgstr "در"
+
+msgid "min"
+msgstr "دقیقه"
+
+msgid "Open"
+msgstr "باز است"
+
+msgid "Closed"
+msgstr "بسته است"
+
+msgid "No restaurants found matching your criteria."
+msgstr "متأسفانه رستورانی با این مشخصات یافت نشد."
+
+msgid "Unmatched Variety"
+msgstr "تنوع بی‌نظیر"
+
+msgid "Access hundreds of diverse menus from the best restaurants"
+msgstr "دسترسی به صدها منوی متنوع از بهترین رستوران‌ها"
+
+msgid "Fast Delivery"
+msgstr "ارسال سریع"
+
+msgid "Food delivery in the shortest time with smart rider system"
+msgstr "تحویل غذا در کمترین زمان ممکن با سیستم هوشمند پیک"
+
+msgid "Easy Payment"
+msgstr "پرداخت آسان"
+
+msgid "Online and credit payment with high security"
+msgstr "امکان پرداخت آنلاین و اعتباری با امنیت بالا"
+
+msgid "Login"
+msgstr "ورود"
+
+msgid "Register"
+msgstr "ثبت نام"
+
+msgid "Logout"
+msgstr "خروج"
+
+msgid "Profile"
+msgstr "پروفایل"
+
+msgid "Cart"
+msgstr "سبد خرید"
+
+msgid "Welcome"
+msgstr "خوش آمدید"
+
+msgid "Login to DanialFood"
+msgstr "ورود به دانیال فود"
+
+msgid "Username"
+msgstr "نام کاربری"
+
+msgid "Password"
+msgstr "رمز عبور"
+
+msgid "Don't have an account?"
+msgstr "کاربر ندارید؟"
+
+msgid "Join DanialFood"
+msgstr "عضویت در دانیال فود"
+
+msgid "Email"
+msgstr "ایمیل"
+
+msgid "Account Type"
+msgstr "نوع حساب کاربری"
+
+msgid "Customer"
+msgstr "مشتری"
+
+msgid "Restaurant Owner"
+msgstr "صاحب رستوران"
+
+msgid "Already a member?"
+msgstr "قبلاً عضو شده‌اید？"
+
+msgid "Shopping Cart - DanialFood"
+msgstr "سبد خرید - دانیال فود"
+
+msgid "Your Shopping Cart"
+msgstr "سبد خرید شما"
+
+msgid "Food Name"
+msgstr "نام غذا"
+
+msgid "Quantity"
+msgstr "تعداد"
+
+msgid "Unit Price"
+msgstr "قیمت واحد"
+
+msgid "Total"
+msgstr "مجموع"
+
+msgid "Action"
+msgstr "عملیات"
+
+msgid "Toman"
+msgstr "تومان"
+
+msgid "Remove"
+msgstr "حذف"
+
+msgid "Total:"
+msgstr "جمع کل:"
+
+msgid "Continue Shopping"
+msgstr "ادامه خرید"
+
+msgid "Proceed to Payment"
+msgstr "ادامه و پرداخت"
+
+msgid "Your shopping cart is empty."
+msgstr "سبد خرید شما خالی است."
+
+msgid "View Restaurants"
+msgstr "مشاهده رستوران‌ها"
+
+msgid "Checkout - DanialFood"
+msgstr "تسویه حساب - دانیال فود"
+
+msgid "Finalize Order"
+msgstr "ثبت نهایی سفارش"
+
+msgid "Restaurant:"
+msgstr "رستوران:"
+
+msgid "Amount to pay:"
+msgstr "مبلغ قابل پرداخت:"
+
+msgid "Select saved address:"
+msgstr "انتخاب آدرس ذخیره شده:"
+
+msgid "Or enter a new address:"
+msgstr "یا وارد کردن آدرس جدید:"
+
+msgid "Enter your exact address..."
+msgstr "آدرس دقیق خود را وارد کنید..."
+
+msgid "Notes (optional):"
+msgstr "توضیحات (اختیاری):"
+
+msgid "Any special instructions..."
+msgstr "هرگونه دستورالعمل خاص..."
+
+msgid "Confirm and Place Order"
+msgstr "تایید و ثبت سفارش"
+
+msgid "Restaurant Menu"
+msgstr "منوی رستوران"
+
+msgid "No menu items available."
+msgstr "آیتمی در منو موجود نیست."
+
+msgid "+ Add"
+msgstr "+ افزودن"
+
+msgid "User Reviews"
+msgstr "نظرات کاربران"
+
+msgid "No reviews yet."
+msgstr "هنوز نظری ثبت نشده است."
+
+msgid "Submit Review"
+msgstr "ثبت نظر"
+
+msgid "Rating (1 to 5):"
+msgstr "امتیاز (۱ تا ۵):"
+
+msgid "stars"
+msgstr "ستاره"
+
+msgid "star"
+msgstr "ستاره"
+
+msgid "Your review:"
+msgstr "نظر شما:"
+
+msgid "Customer Panel"
+msgstr "پنل مشتری"
+
+msgid "Access Menu"
+msgstr "منوی دسترسی"
+
+msgid "Restaurants"
+msgstr "رستوران‌ها"
+
+msgid "Profile & Security"
+msgstr "پروفایل و امنیت"
+
+msgid "Favorites"
+msgstr "مورد علاقه"
+
+msgid "No favorites added yet."
+msgstr "هنوز موردی اضافه نکردید."
+
+msgid "Address Management"
+msgstr "مدیریت آدرس‌ها"
+
+msgid "default"
+msgstr "پیش‌فرض"
+
+msgid "Active address"
+msgstr "آدرس فعال"
+
+msgid "Activate"
+msgstr "فعال‌سازی"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "You have not added any addresses yet."
+msgstr "شما هنوز آدرسی ثبت نکرده‌اید."
+
+msgid "+ Add new address"
+msgstr "➕ افزودن آدرس جدید"
+
+msgid "Title (e.g. home)"
+msgstr "عنوان (مثلا خانه)"
+
+msgid "Tehran"
+msgstr "تهران"
+
+msgid "Shiraz"
+msgstr "شیراز"
+
+msgid "Isfahan"
+msgstr "اصفهان"
+
+msgid "Mashhad"
+msgstr "مشهد"
+
+msgid "Exact address"
+msgstr "آدرس دقیق"
+
+msgid "Save address"
+msgstr "ذخیره آدرس"
+
+msgid "Top Restaurants"
+msgstr "رستوران‌های برتر"
+
+msgid "Restaurant Image"
+msgstr "تصویر رستوران"
+
+msgid "View Menu"
+msgstr "مشاهده منو"
+
+msgid "Recent Orders"
+msgstr "آخرین سفارشات"
+
+msgid "Order Number"
+msgstr "شماره سفارش"
+
+msgid "Date"
+msgstr "تاریخ"
+
+msgid "Amount"
+msgstr "مبلغ"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "No orders placed yet."
+msgstr "هنوز سفارشی ثبت نکرده‌اید."
+
+msgid "Restaurant Management Panel"
+msgstr "پنل مدیریت رستوران"
+
+msgid "Restaurant Management"
+msgstr "مدیریت رستوران"
+
+msgid "Dashboard"
+msgstr "داشبورد"
+
+msgid "Menu Management"
+msgstr "مدیریت منو"
+
+msgid "Received Orders"
+msgstr "سفارشات دریافتی"
+
+msgid "Security Settings"
+msgstr "تنظیمات امنیتی"
+
+msgid "You have not registered a restaurant yet."
+msgstr "شما هنوز رستورانی ثبت نکرده‌اید."
+
+msgid "Register new restaurant"
+msgstr "ثبت رستوران جدید"
+
+msgid "Today's Sales"
+msgstr "فروش امروز"
+
+msgid "New Orders"
+msgstr "سفارشات جدید"
+
+msgid "Restaurant Status"
+msgstr "وضعیت رستوران"
+
+msgid "Change Status"
+msgstr "تغییر وضعیت"
+
+msgid "Number"
+msgstr "شماره"
+
+msgid "Items"
+msgstr "آیتم‌ها"
+
+msgid "items"
+msgstr "آیتم"
+
+msgid "Confirm"
+msgstr "تایید"
+
+msgid "Start Preparing"
+msgstr "شروع آماده‌سازی"
+
+msgid "Ready"
+msgstr "آماده"
+
+msgid "No orders found."
+msgstr "سفارشی وجود ندارد."
+
+msgid "System Management Panel"
+msgstr "پنل مدیریت سیستم"
+
+msgid "System Management"
+msgstr "مدیریت کل سیستم"
+
+msgid "User Management"
+msgstr "مدیریت کاربران"
+
+msgid "Rider Management"
+msgstr "مدیریت پیک‌ها"
+
+msgid "DanialFood Admin Dashboard"
+msgstr "داشبورد مدیریتی دانیال فود"
+
+msgid "Total Users"
+msgstr "تعداد کاربران"
+
+msgid "Today's Orders"
+msgstr "سفارشات امروز"
+
+msgid "Online Riders"
+msgstr "پیک‌های آنلاین"
+
+msgid "Restaurants Pending Verification"
+msgstr "رستوران‌های در انتظار تایید"
+
+msgid "Restaurant Name"
+msgstr "نام رستوران"
+
+msgid "Owner"
+msgstr "صاحب رستوران"
+
+msgid "Phone"
+msgstr "شماره تماس"
+
+msgid "Registration Date"
+msgstr "تاریخ ثبت‌نام"
+
+msgid "Verify Restaurant"
+msgstr "تایید رستوران"
+
+msgid "No restaurants pending verification."
+msgstr "موردی برای تایید وجود ندارد."
+
+msgid "DanialFood Online Food Ordering System"
+msgstr "سامانه سفارش غذای دانیال فود"
+
+msgid "User Profile"
+msgstr "پروفایل کاربری"
+
+msgid "Account Settings"
+msgstr "تنظیمات حساب کاربری"
+
+msgid "Role"
+msgstr "نقش"
+
+msgid "Change Password"
+msgstr "تغییر رمز عبور"
+
+msgid "Save new password"
+msgstr "ذخیره رمز عبور جدید"
+
+msgid "Access Denied"
+msgstr "دسترسی غیرمجاز"
+
+msgid "You do not have permission to access this page."
+msgstr "شما اجازه دسترسی به این صفحه را ندارید."
+
+msgid "Return to homepage"
+msgstr "بازگشت به صفحه اصلی"
+
+msgid "Order"
+msgstr "سفارش"
+
+msgid "Back to panel"
+msgstr "بازگشت به پنل"
+
+msgid "Order Status"
+msgstr "وضعیت سفارش"
+
+msgid "Placed"
+msgstr "ثبت شده"
+
+msgid "Confirmed"
+msgstr "تایید"
+
+msgid "Preparing"
+msgstr "آماده‌سازی"
+
+msgid "Delivering"
+msgstr "ارسال"
+
+msgid "Delivered"
+msgstr "تحویل"
+
+msgid "This order is"
+msgstr "این سفارش"
+
+msgid "Order Items"
+msgstr "آیتم‌های سفارش"
+
+msgid "Delivery Info"
+msgstr "اطلاعات ارسال"
+
+msgid "Address"
+msgstr "آدرس"
+
+msgid "Rider"
+msgstr "پیک"
+
+msgid "Delivery fee"
+msgstr "هزینه ارسال"

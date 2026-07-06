@@ -1,47 +1,38 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}ثبت‌نام - دانیال فود{% endblock %}
+{% block title %}{% trans "Register - DanialFood" %}{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 500px; margin: 4rem auto;">
-    <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem;">عضویت در دانیال فود</h2>
-
-    {% if messages %}
-    <div style="margin-bottom: 1rem;">
-        {% for message in messages %}
-        <div class="badge {% if message.tags == 'error' %}badge-danger{% else %}badge-success{% endif %}" style="display: block; padding: 1rem; margin-bottom: 0.5rem;">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+<div class="card auth-card">
+    <h2>{% trans "Join DanialFood" %}</h2>
 
     <form method="post">
         {% csrf_token %}
-        <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">نام کاربری:</label>
-            <input type="text" name="username" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        <div class="form-group">
+            <label>{% trans "Username" %}</label>
+            <input type="text" name="username" class="form-control" required>
         </div>
-        <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">ایمیل:</label>
-            <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        <div class="form-group">
+            <label>{% trans "Email" %}</label>
+            <input type="email" name="email" class="form-control" required>
         </div>
-        <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">رمز عبور:</label>
-            <input type="password" name="password" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        <div class="form-group">
+            <label>{% trans "Password" %}</label>
+            <input type="password" name="password" class="form-control" required>
         </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">نوع حساب کاربری:</label>
-            <select name="role" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
-                <option value="customer">مشتری</option>
-                <option value="restaurant_owner">صاحب رستوران</option>
+        <div class="form-group">
+            <label>{% trans "Account Type" %}</label>
+            <select name="role" class="form-control">
+                <option value="customer">{% trans "Customer" %}</option>
+                <option value="restaurant_owner">{% trans "Restaurant Owner" %}</option>
             </select>
         </div>
-        <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1.1rem;">ثبت‌نام</button>
+        <button type="submit" class="btn btn-block btn-lg">{% trans "Register" %}</button>
     </form>
 
-    <div style="margin-top: 1.5rem; text-align: center;">
-        <p>قبلاً عضو شده‌اید؟ <a href="{% url 'web_login' %}" style="color: var(--primary); text-decoration: none;">وارد شوید</a></p>
+    <div class="auth-footer">
+        {% trans "Already a member?" %} <a href="{% url 'web_login' %}">{% trans "Login" %}</a>
     </div>
 </div>
 {% endblock %}

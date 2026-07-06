@@ -5,10 +5,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls.i18n import i18n_patterns
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from . import views
 
 urlpatterns = [
+    # Language switching (no prefix)
+    path('i18n/', include('django.conf.urls.i18n')),
+
     # Web Panels
     path('', views.index, name='index'),
     path('login/', views.login_view, name='web_login'),
@@ -29,15 +33,24 @@ urlpatterns = [
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
     path('dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),
 
+    # Owner actions
+    path('owner/toggle-status/', views.owner_toggle_status, name='owner_toggle_status'),
+    path('owner/order/<int:pk>/confirm/', views.owner_confirm_order, name='owner_confirm_order'),
+    path('owner/order/<int:pk>/prepare/', views.owner_start_preparing, name='owner_start_preparing'),
+    path('owner/order/<int:pk>/ready/', views.owner_mark_ready, name='owner_mark_ready'),
+
+    # Admin actions
+    path('admin/verify-restaurant/<int:pk>/', views.admin_verify_restaurant, name='admin_verify_restaurant'),
+
     # Admin panel
     path('admin/', admin.site.urls),
-    
+
     # API endpoints
     path('api/auth/', include('apps.accounts.urls')),
     path('api/restaurants/', include('apps.restaurants.urls')),
     path('api/orders/', include('apps.orders.urls')),
     path('api/delivery/', include('apps.delivery.urls')),
-    
+
     # API Schema & Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

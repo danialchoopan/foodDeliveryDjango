@@ -1,151 +1,81 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}دانیال فود | سامانه سفارش آنلاین غذا{% endblock %}
-
-{% block extra_css %}
-<style>
-    .hero {
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-        background-size: cover;
-        background-position: center;
-        color: white;
-        padding: 6rem 2rem;
-        text-align: center;
-        border-radius: 20px;
-        margin-bottom: 3rem;
-    }
-    .search-box {
-        background: white;
-        padding: 0.5rem;
-        border-radius: 15px;
-        display: inline-flex;
-        width: 100%;
-        max-width: 600px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .search-box input {
-        flex: 1;
-        border: none;
-        padding: 1rem;
-        font-size: 1.1rem;
-        outline: none;
-    }
-    .filter-section {
-        margin-bottom: 2rem;
-        display: flex;
-        gap: 1rem;
-        overflow-x: auto;
-        padding-bottom: 1rem;
-    }
-    .filter-chip {
-        padding: 0.5rem 1.5rem;
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        text-decoration: none;
-        color: var(--secondary);
-        white-space: nowrap;
-        transition: all 0.3s;
-    }
-    .filter-chip.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-    .res-card {
-        transition: transform 0.3s;
-        cursor: pointer;
-        text-decoration: none;
-        color: inherit;
-    }
-    .res-card:hover {
-        transform: translateY(-5px);
-    }
-    .res-image {
-        height: 180px;
-        background: #eee;
-        border-radius: 12px 12px 0 0;
-        margin: -1.5rem -1.5rem 1rem -1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-    }
-</style>
-{% endblock %}
+{% block title %}{% trans "DanialFood | Online Food Ordering" %}{% endblock %}
 
 {% block content %}
 <div class="hero">
-    <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">دانیال فود</h1>
-    <p style="font-size: 1.5rem; margin-bottom: 2.5rem;">سفارش آنلاین غذا از بهترین رستوران‌های شهر شما</p>
+    <h1 class="hero-title">{% trans "DanialFood" %}</h1>
+    <p class="hero-subtitle">{% trans "Order food online from the best restaurants in your city" %}</p>
 
     <form action="{% url 'index' %}" method="get" class="search-box">
         {% if current_city %}<input type="hidden" name="city" value="{{ current_city }}">{% endif %}
         {% if current_cuisine %}<input type="hidden" name="cuisine" value="{{ current_cuisine }}">{% endif %}
-        <input type="text" name="search" placeholder="جستجوی رستوران یا نوع غذا..." value="{{ request.GET.search|default:'' }}">
-        <button type="submit" class="btn" style="padding: 0 2.5rem;">جستجو</button>
+        <input type="text" name="search" placeholder="{% trans 'Search restaurant or food type...' %}" value="{{ request.GET.search|default:'' }}">
+        <button type="submit" class="btn">{% trans "Search" %}</button>
     </form>
 
     {% if active_address %}
-    <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.2); display: inline-block; padding: 0.5rem 1.5rem; border-radius: 30px; backdrop-filter: blur(5px);">
-        📍 ارسال به: <strong>{{ active_address.title }} ({{ active_address.city }})</strong>
-        <a href="{% url 'customer_dashboard' %}" style="color: white; margin-right: 1rem; font-size: 0.8rem; text-decoration: underline;">تغییر آدرس</a>
+    <div class="delivery-bar">
+        {% trans "Deliver to:" %} <strong>{{ active_address.title }} ({{ active_address.city }})</strong>
+        <a href="{% url 'customer_dashboard' %}">{% trans "Change address" %}</a>
     </div>
     {% endif %}
 </div>
 
 <div class="filter-section">
-    <a href="{% url 'index' %}{% if current_cuisine %}?cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if not current_city %}active{% endif %}">همه شهرها</a>
+    <a href="{% url 'index' %}{% if current_cuisine %}?cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if not current_city %}active{% endif %}">{% trans "All cities" %}</a>
     {% for city in cities %}
     <a href="{% url 'index' %}?city={{ city }}{% if current_cuisine %}&cuisine={{ current_cuisine }}{% endif %}" class="filter-chip {% if current_city == city %}active{% endif %}">{{ city }}</a>
     {% endfor %}
 </div>
 
-<div class="filter-section" style="margin-top: -1rem;">
-    <a href="{% url 'index' %}{% if current_city %}?city={{ current_city }}{% endif %}" class="filter-chip {% if not current_cuisine %}active{% endif %}">همه دسته‌ها</a>
+<div class="filter-section mt-1">
+    <a href="{% url 'index' %}{% if current_city %}?city={{ current_city }}{% endif %}" class="filter-chip {% if not current_cuisine %}active{% endif %}">{% trans "All categories" %}</a>
     {% for val, label in cuisines %}
     <a href="{% url 'index' %}?cuisine={{ val }}{% if current_city %}&city={{ current_city }}{% endif %}" class="filter-chip {% if current_cuisine == val %}active{% endif %}">{{ label }}</a>
     {% endfor %}
 </div>
 
-<h2>رستوران‌های فعال {% if current_city %}در {{ current_city }}{% endif %}</h2>
+<h2 class="section-title">{% trans "Active Restaurants" %} {% if current_city %}{% trans "in" %} {{ current_city }}{% endif %}</h2>
 
 <div class="grid">
     {% for res in restaurants %}
     <a href="{% url 'restaurant_detail' res.pk %}" class="card res-card">
         <div class="res-image">🍕</div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin: 0;">{{ res.name }}</h3>
-            <span style="color: #ffc107;">⭐️ {{ res.average_rating|floatformat:1 }}</span>
+        <div class="res-info">
+            <h3>{{ res.name }}</h3>
+            <span class="text-warning font-bold">⭐ {{ res.average_rating|floatformat:1 }}</span>
         </div>
-        <p style="color: #666; margin: 0.5rem 0;">{{ res.get_cuisine_type_display }} • {{ res.city }}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
-            <span style="color: #888; font-size: 0.9rem;">{{ res.delivery_time }} دقیقه</span>
-            <span class="badge badge-success">باز است</span>
+        <p class="text-light mt-1">{{ res.get_cuisine_type_display }} • {{ res.city }}</p>
+        <div class="res-meta">
+            <span class="text-muted font-sm">{{ res.delivery_time }} {% trans "min" %}</span>
+            <span class="badge badge-success">{% trans "Open" %}</span>
         </div>
     </a>
     {% empty %}
-    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
-        <p style="font-size: 1.2rem; color: #888;">متأسفانه رستورانی با این مشخصات یافت نشد.</p>
+    <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <p>{% trans "No restaurants found matching your criteria." %}</p>
     </div>
     {% endfor %}
 </div>
 
-<div class="grid" style="margin-top: 4rem;">
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🍕</div>
-        <h3>تنوع بی‌نظیر</h3>
-        <p>دسترسی به صدها منوی متنوع از بهترین رستوران‌ها</p>
+<div class="grid mt-4">
+    <div class="card feature-card">
+        <div class="feature-icon">🍕</div>
+        <h3>{% trans "Unmatched Variety" %}</h3>
+        <p>{% trans "Access hundreds of diverse menus from the best restaurants" %}</p>
     </div>
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
-        <h3>ارسال سریع</h3>
-        <p>تحویل غذا در کمترین زمان ممکن با سیستم هوشمند پیک</p>
+    <div class="card feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>{% trans "Fast Delivery" %}</h3>
+        <p>{% trans "Food delivery in the shortest time with smart rider system" %}</p>
     </div>
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">💰</div>
-        <h3>پرداخت آسان</h3>
-        <p>امکان پرداخت آنلاین و اعتباری با امنیت بالا</p>
+    <div class="card feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>{% trans "Easy Payment" %}</h3>
+        <p>{% trans "Online and credit payment with high security" %}</p>
     </div>
 </div>
 {% endblock %}

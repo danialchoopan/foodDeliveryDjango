@@ -1,13 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 from apps.accounts.models import User, Address
 from apps.restaurants.models import Restaurant, RestaurantReview, FavoriteRestaurant, MenuItem
 from apps.orders.models import Order, Cart, CartItem, OrderItem
 from django.utils import timezone
 from django.db.models import Sum, Avg, Q
+from urllib.parse import urlparse
+
+
+def _is_safe_url(url):
+    """Validate that a URL is safe (relative path, no external redirects)."""
+    if not url:
+        return False
+    parsed = urlparse(url)
+    return not parsed.scheme and not parsed.netloc and url.startswith('/')
 
 def index(request):
     city = request.GET.get('city')
@@ -60,6 +70,8 @@ def index(request):
 
 def login_view(request):
     next_url = request.GET.get('next') or request.POST.get('next')
+    if not _is_safe_url(next_url):
+        next_url = None
 
     if request.user.is_authenticated:
         if next_url:
@@ -188,6 +200,7 @@ def add_address(request):
     return redirect('customer_dashboard')
 
 @login_required
+@require_POST
 def delete_address(request, pk):
     address = get_object_or_404(Address, pk=pk, user=request.user)
     address.delete()
@@ -195,6 +208,7 @@ def delete_address(request, pk):
     return redirect('customer_dashboard')
 
 @login_required
+@require_POST
 def set_active_address(request, pk):
     address = get_object_or_404(Address, pk=pk, user=request.user)
     Address.objects.filter(user=request.user).update(is_active=False)
@@ -204,6 +218,7 @@ def set_active_address(request, pk):
     return redirect('customer_dashboard')
 
 @login_required
+@require_POST
 def add_to_cart(request, item_id):
     menu_item = get_object_or_404(MenuItem, id=item_id)
     cart, _ = Cart.objects.get_or_create(customer=request.user)
@@ -228,6 +243,7 @@ def cart_view(request):
     return render(request, 'cart.html', {'cart': cart})
 
 @login_required
+@require_POST
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__customer=request.user)
     cart_item.delete()
@@ -279,18 +295,30 @@ def checkout(request):
 
         restaurant = cart.items.first().menu_item.restaurant
 
+        # Calculate delivery fee
+        from apps.delivery.services import DeliveryFeeCalculator
+        restaurant_location = restaurant.get_location()
+        fee_result = DeliveryFeeCalculator.calculate_fee(
+            restaurant_lat=float(restaurant_location[0]) if restaurant_location else 0,
+            restaurant_lng=float(restaurant_location[1]) if restaurant_location else 0,
+            customer_lat=float(lat) if lat else 0,
+            customer_lng=float(lng) if lng else 0,
+        )
+
         # Create Order
         order = Order.objects.create(
             customer=request.user,
             restaurant=restaurant,
             delivery_address=address_text,
             subtotal=cart.total,
-            total_amount=cart.total,
+            delivery_fee=fee_result['delivery_fee'],
+            total_amount=cart.total + fee_result['delivery_fee'],
             customer_latitude=lat,
-            customer_longitude=lng
+            customer_longitude=lng,
+            distance_km=fee_result['distance_km']
         )
 
-        # Create Order Items
+        # Create Order Items and deduct stock
         for item in cart.items.all():
             OrderItem.objects.create(
                 order=order,
@@ -300,6 +328,11 @@ def checkout(request):
                 item_name=item.menu_item.name,
                 item_description=item.menu_item.description
             )
+            item.menu_item.deduct_stock()
+
+        # Increment restaurant order count
+        restaurant.current_orders_count += 1
+        restaurant.save(update_fields=['current_orders_count'])
 
         # Clear Cart
         cart.items.all().delete()
@@ -333,6 +366,7 @@ def restaurant_detail(request, pk):
     })
 
 @login_required
+@require_POST
 def toggle_favorite(request, pk):
     restaurant = get_object_or_404(Restaurant, pk=pk)
     favorite, created = FavoriteRestaurant.objects.get_or_create(user=request.user, restaurant=restaurant)
@@ -379,3 +413,62 @@ def admin_dashboard(request):
         'online_riders': online_riders,
         'pending_restaurants': pending_restaurants
     })
+
+
+# === Owner Action Views ===
+
+@login_required
+@require_POST
+def owner_toggle_status(request):
+    restaurant = Restaurant.objects.filter(owner=request.user).first()
+    if restaurant:
+        restaurant.is_open = not restaurant.is_open
+        restaurant.save(update_fields=['is_open'])
+        status_text = 'open' if restaurant.is_open else 'closed'
+        messages.success(request, f'Restaurant is now {status_text}.')
+    return redirect('owner_dashboard')
+
+@login_required
+@require_POST
+def owner_confirm_order(request, pk):
+    restaurant = Restaurant.objects.filter(owner=request.user).first()
+    order = get_object_or_404(Order, pk=pk, restaurant=restaurant)
+    if order.status == Order.Status.PENDING:
+        order.update_status(Order.Status.CONFIRMED)
+        messages.success(request, f'Order #{order.order_number} confirmed.')
+    return redirect('owner_dashboard')
+
+@login_required
+@require_POST
+def owner_start_preparing(request, pk):
+    restaurant = Restaurant.objects.filter(owner=request.user).first()
+    order = get_object_or_404(Order, pk=pk, restaurant=restaurant)
+    if order.status == Order.Status.CONFIRMED:
+        order.update_status(Order.Status.PREPARING)
+        messages.success(request, f'Order #{order.order_number} is now being prepared.')
+    return redirect('owner_dashboard')
+
+@login_required
+@require_POST
+def owner_mark_ready(request, pk):
+    restaurant = Restaurant.objects.filter(owner=request.user).first()
+    order = get_object_or_404(Order, pk=pk, restaurant=restaurant)
+    if order.status == Order.Status.PREPARING:
+        order.update_status(Order.Status.READY)
+        messages.success(request, f'Order #{order.order_number} is ready for delivery.')
+    return redirect('owner_dashboard')
+
+
+# === Admin Action Views ===
+
+@login_required
+@require_POST
+def admin_verify_restaurant(request, pk):
+    if not (request.user.is_staff or request.user.role == User.Role.ADMIN):
+        messages.error(request, 'Permission denied.')
+        return redirect('index')
+    restaurant = get_object_or_404(Restaurant, pk=pk)
+    restaurant.is_verified = True
+    restaurant.save(update_fields=['is_verified'])
+    messages.success(request, f'Restaurant "{restaurant.name}" has been verified.')
+    return redirect('admin_dashboard')

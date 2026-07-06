@@ -1,0 +1,488 @@
+# English translation for DanialFood
+# Copyright (C) 2024
+# This file is distributed under the same license as the DanialFood project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DanialFood 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "DanialFood"
+msgstr "DanialFood"
+
+msgid "DanialFood | Online Food Ordering"
+msgstr "DanialFood | Online Food Ordering"
+
+msgid "Order food online from the best restaurants in your city"
+msgstr "Order food online from the best restaurants in your city"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Search restaurant or food type..."
+msgstr "Search restaurant or food type..."
+
+msgid "Deliver to:"
+msgstr "Deliver to:"
+
+msgid "Change address"
+msgstr "Change address"
+
+msgid "All cities"
+msgstr "All cities"
+
+msgid "All categories"
+msgstr "All categories"
+
+msgid "Active Restaurants"
+msgstr "Active Restaurants"
+
+msgid "in"
+msgstr "in"
+
+msgid "min"
+msgstr "min"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Closed"
+msgstr "Closed"
+
+msgid "No restaurants found matching your criteria."
+msgstr "No restaurants found matching your criteria."
+
+msgid "Unmatched Variety"
+msgstr "Unmatched Variety"
+
+msgid "Access hundreds of diverse menus from the best restaurants"
+msgstr "Access hundreds of diverse menus from the best restaurants"
+
+msgid "Fast Delivery"
+msgstr "Fast Delivery"
+
+msgid "Food delivery in the shortest time with smart rider system"
+msgstr "Food delivery in the shortest time with smart rider system"
+
+msgid "Easy Payment"
+msgstr "Easy Payment"
+
+msgid "Online and credit payment with high security"
+msgstr "Online and credit payment with high security"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Register"
+msgstr "Register"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "Cart"
+msgstr "Cart"
+
+msgid "Welcome"
+msgstr "Welcome"
+
+msgid "Login to DanialFood"
+msgstr "Login to DanialFood"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Don't have an account?"
+msgstr "Don't have an account?"
+
+msgid "Join DanialFood"
+msgstr "Join DanialFood"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Account Type"
+msgstr "Account Type"
+
+msgid "Customer"
+msgstr "Customer"
+
+msgid "Restaurant Owner"
+msgstr "Restaurant Owner"
+
+msgid "Already a member?"
+msgstr "Already a member?"
+
+msgid "Shopping Cart - DanialFood"
+msgstr "Shopping Cart - DanialFood"
+
+msgid "Your Shopping Cart"
+msgstr "Your Shopping Cart"
+
+msgid "Food Name"
+msgstr "Food Name"
+
+msgid "Quantity"
+msgstr "Quantity"
+
+msgid "Unit Price"
+msgstr "Unit Price"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Toman"
+msgstr "Toman"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Total:"
+msgstr "Total:"
+
+msgid "Continue Shopping"
+msgstr "Continue Shopping"
+
+msgid "Proceed to Payment"
+msgstr "Proceed to Payment"
+
+msgid "Your shopping cart is empty."
+msgstr "Your shopping cart is empty."
+
+msgid "View Restaurants"
+msgstr "View Restaurants"
+
+msgid "Checkout - DanialFood"
+msgstr "Checkout - DanialFood"
+
+msgid "Finalize Order"
+msgstr "Finalize Order"
+
+msgid "Restaurant:"
+msgstr "Restaurant:"
+
+msgid "Amount to pay:"
+msgstr "Amount to pay:"
+
+msgid "Select saved address:"
+msgstr "Select saved address:"
+
+msgid "Or enter a new address:"
+msgstr "Or enter a new address:"
+
+msgid "Enter your exact address..."
+msgstr "Enter your exact address..."
+
+msgid "Notes (optional):"
+msgstr "Notes (optional):"
+
+msgid "Any special instructions..."
+msgstr "Any special instructions..."
+
+msgid "Confirm and Place Order"
+msgstr "Confirm and Place Order"
+
+msgid "Restaurant Menu"
+msgstr "Restaurant Menu"
+
+msgid "No menu items available."
+msgstr "No menu items available."
+
+msgid "+ Add"
+msgstr "+ Add"
+
+msgid "User Reviews"
+msgstr "User Reviews"
+
+msgid "No reviews yet."
+msgstr "No reviews yet."
+
+msgid "Submit Review"
+msgstr "Submit Review"
+
+msgid "Rating (1 to 5):"
+msgstr "Rating (1 to 5):"
+
+msgid "stars"
+msgstr "stars"
+
+msgid "star"
+msgstr "star"
+
+msgid "Your review:"
+msgstr "Your review:"
+
+msgid "Customer Panel"
+msgstr "Customer Panel"
+
+msgid "Access Menu"
+msgstr "Access Menu"
+
+msgid "Restaurants"
+msgstr "Restaurants"
+
+msgid "Profile & Security"
+msgstr "Profile & Security"
+
+msgid "Favorites"
+msgstr "Favorites"
+
+msgid "No favorites added yet."
+msgstr "No favorites added yet."
+
+msgid "Address Management"
+msgstr "Address Management"
+
+msgid "default"
+msgstr "default"
+
+msgid "Active address"
+msgstr "Active address"
+
+msgid "Activate"
+msgstr "Activate"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "You have not added any addresses yet."
+msgstr "You have not added any addresses yet."
+
+msgid "+ Add new address"
+msgstr "+ Add new address"
+
+msgid "Title (e.g. home)"
+msgstr "Title (e.g. home)"
+
+msgid "Tehran"
+msgstr "Tehran"
+
+msgid "Shiraz"
+msgstr "Shiraz"
+
+msgid "Isfahan"
+msgstr "Isfahan"
+
+msgid "Mashhad"
+msgstr "Mashhad"
+
+msgid "Exact address"
+msgstr "Exact address"
+
+msgid "Save address"
+msgstr "Save address"
+
+msgid "Top Restaurants"
+msgstr "Top Restaurants"
+
+msgid "Restaurant Image"
+msgstr "Restaurant Image"
+
+msgid "View Menu"
+msgstr "View Menu"
+
+msgid "Recent Orders"
+msgstr "Recent Orders"
+
+msgid "Order Number"
+msgstr "Order Number"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Amount"
+msgstr "Amount"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "No orders placed yet."
+msgstr "No orders placed yet."
+
+msgid "Restaurant Management Panel"
+msgstr "Restaurant Management Panel"
+
+msgid "Restaurant Management"
+msgstr "Restaurant Management"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Menu Management"
+msgstr "Menu Management"
+
+msgid "Received Orders"
+msgstr "Received Orders"
+
+msgid "Security Settings"
+msgstr "Security Settings"
+
+msgid "You have not registered a restaurant yet."
+msgstr "You have not registered a restaurant yet."
+
+msgid "Register new restaurant"
+msgstr "Register new restaurant"
+
+msgid "Today's Sales"
+msgstr "Today's Sales"
+
+msgid "New Orders"
+msgstr "New Orders"
+
+msgid "Restaurant Status"
+msgstr "Restaurant Status"
+
+msgid "Change Status"
+msgstr "Change Status"
+
+msgid "Number"
+msgstr "Number"
+
+msgid "Items"
+msgstr "Items"
+
+msgid "items"
+msgstr "items"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Start Preparing"
+msgstr "Start Preparing"
+
+msgid "Ready"
+msgstr "Ready"
+
+msgid "No orders found."
+msgstr "No orders found."
+
+msgid "System Management Panel"
+msgstr "System Management Panel"
+
+msgid "System Management"
+msgstr "System Management"
+
+msgid "User Management"
+msgstr "User Management"
+
+msgid "Rider Management"
+msgstr "Rider Management"
+
+msgid "DanialFood Admin Dashboard"
+msgstr "DanialFood Admin Dashboard"
+
+msgid "Total Users"
+msgstr "Total Users"
+
+msgid "Today's Orders"
+msgstr "Today's Orders"
+
+msgid "Online Riders"
+msgstr "Online Riders"
+
+msgid "Restaurants Pending Verification"
+msgstr "Restaurants Pending Verification"
+
+msgid "Restaurant Name"
+msgstr "Restaurant Name"
+
+msgid "Owner"
+msgstr "Owner"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "Registration Date"
+msgstr "Registration Date"
+
+msgid "Verify Restaurant"
+msgstr "Verify Restaurant"
+
+msgid "No restaurants pending verification."
+msgstr "No restaurants pending verification."
+
+msgid "DanialFood Online Food Ordering System"
+msgstr "DanialFood Online Food Ordering System"
+
+msgid "User Profile"
+msgstr "User Profile"
+
+msgid "Account Settings"
+msgstr "Account Settings"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Change Password"
+msgstr "Change Password"
+
+msgid "Save new password"
+msgstr "Save new password"
+
+msgid "Access Denied"
+msgstr "Access Denied"
+
+msgid "You do not have permission to access this page."
+msgstr "You do not have permission to access this page."
+
+msgid "Return to homepage"
+msgstr "Return to homepage"
+
+msgid "Order"
+msgstr "Order"
+
+msgid "Back to panel"
+msgstr "Back to panel"
+
+msgid "Order Status"
+msgstr "Order Status"
+
+msgid "Placed"
+msgstr "Placed"
+
+msgid "Confirmed"
+msgstr "Confirmed"
+
+msgid "Preparing"
+msgstr "Preparing"
+
+msgid "Delivering"
+msgstr "Delivering"
+
+msgid "Delivered"
+msgstr "Delivered"
+
+msgid "This order is"
+msgstr "This order is"
+
+msgid "Order Items"
+msgstr "Order Items"
+
+msgid "Delivery Info"
+msgstr "Delivery Info"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "Rider"
+msgstr "Rider"
+
+msgid "Delivery fee"
+msgstr "Delivery fee"

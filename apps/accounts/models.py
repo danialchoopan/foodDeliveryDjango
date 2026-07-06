@@ -141,9 +141,9 @@ class Address(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_default:
-            Address.objects.filter(user=self.user, is_default=True).update(is_default=False)
+            Address.objects.filter(user=self.user, is_default=True).exclude(pk=self.pk).update(is_default=False)
         if self.is_active:
-            Address.objects.filter(user=self.user, is_active=True).update(is_active=False)
+            Address.objects.filter(user=self.user, is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
 

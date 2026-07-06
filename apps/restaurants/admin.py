@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.html import format_html
 from .models import Restaurant, MenuCategory, MenuItem
 
@@ -37,8 +37,8 @@ class RestaurantAdmin(admin.ModelAdmin):
     
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
-            orders_count=Count('orders', filter=models.Q(orders__status__in=['delivered', 'preparing', 'delivering'])),
-            menu_items_count=Count('menu_items', filter=models.Q(menu_items__is_available=True))
+            orders_count=Count('orders', filter=Q(orders__status__in=['delivered', 'preparing', 'delivering'])),
+            menu_items_count=Count('menu_items', filter=Q(menu_items__is_available=True))
         )
     
     def cuisine_type_display(self, obj):

@@ -1,36 +1,29 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}ورود به دانیال فود{% endblock %}
+{% block title %}{% trans "Login to DanialFood" %}{% endblock %}
 
 {% block content %}
-<div style="max-width: 400px; margin: 5rem auto;" class="card">
-    <h2 style="text-align: center; color: var(--primary);">ورود به سیستم</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <div style="background: #f8d7da; color: #721c24; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; text-align: center;">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+<div class="card auth-card">
+    <h2>{% trans "Login" %}</h2>
 
     <form method="post">
         {% csrf_token %}
         {% if next %}
             <input type="hidden" name="next" value="{{ next }}">
         {% endif %}
-        <div style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">نام کاربری</label>
-            <input type="text" name="username" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" required>
+        <div class="form-group">
+            <label>{% trans "Username" %}</label>
+            <input type="text" name="username" class="form-control" required>
         </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">رمز عبور</label>
-            <input type="password" name="password" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" required>
+        <div class="form-group">
+            <label>{% trans "Password" %}</label>
+            <input type="password" name="password" class="form-control" required>
         </div>
-        <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">ورود</button>
+        <button type="submit" class="btn btn-block btn-lg">{% trans "Login" %}</button>
     </form>
-    <div style="margin-top: 1rem; text-align: center; font-size: 0.9rem;">
-        کاربر ندارید؟ <a href="{% url 'web_register' %}" style="color: var(--primary);">ثبت نام کنید</a>
+    <div class="auth-footer">
+        {% trans "Don't have an account?" %} <a href="{% url 'web_register' %}">{% trans "Register" %}</a>
     </div>
 </div>
 {% endblock %}

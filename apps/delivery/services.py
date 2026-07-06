@@ -94,7 +94,7 @@ class RiderMatchingService:
         Returns:
             Rider ID if matched, None otherwise
         """
-        from .services import OrderAssignmentService
+        from apps.orders.services import OrderAssignmentService
         
         try:
             order = Order.objects.get(id=order_id, status=Order.Status.READY, rider__isnull=True)

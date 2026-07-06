@@ -1,51 +1,59 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}سبد خرید - دانیال فود{% endblock %}
+{% block title %}{% trans "Shopping Cart - DanialFood" %}{% endblock %}
 
 {% block content %}
 <div class="card">
-    <h2>سبد خرید شما</h2>
+    <h2 class="section-title">{% trans "Your Shopping Cart" %}</h2>
 
     {% if cart.items.exists %}
-    <table>
-        <thead>
-            <tr>
-                <th>نام غذا</th>
-                <th>تعداد</th>
-                <th>قیمت واحد</th>
-                <th>مجموع</th>
-                <th>عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart.items.all %}
-            <tr>
-                <td>{{ item.menu_item.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.menu_item.price }} تومان</td>
-                <td>{{ item.total }} تومان</td>
-                <td>
-                    <a href="{% url 'remove_from_cart' item.id %}" class="badge badge-danger" style="text-decoration: none;">حذف</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="3">جمع کل:</th>
-                <th>{{ cart.total }} تومان</th>
-                <th></th>
-            </tr>
-        </tfoot>
-    </table>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>{% trans "Food Name" %}</th>
+                    <th>{% trans "Quantity" %}</th>
+                    <th>{% trans "Unit Price" %}</th>
+                    <th>{% trans "Total" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items.all %}
+                <tr>
+                    <td>{{ item.menu_item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.menu_item.price }} {% trans "Toman" %}</td>
+                    <td>{{ item.total }} {% trans "Toman" %}</td>
+                    <td>
+                        <form action="{% url 'remove_from_cart' item.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">{% trans "Remove" %}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3">{% trans "Total:" %}</th>
+                    <th class="cart-total">{{ cart.total }} {% trans "Toman" %}</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
-    <div style="margin-top: 2rem; text-align: left;">
-        <a href="{% url 'checkout' %}" class="btn" style="padding: 1rem 3rem;">ادامه و پرداخت</a>
+    <div class="cart-summary">
+        <a href="{% url 'index' %}" class="btn btn-secondary">{% trans "Continue Shopping" %}</a>
+        <a href="{% url 'checkout' %}" class="btn btn-lg">{% trans "Proceed to Payment" %}</a>
     </div>
     {% else %}
-    <p style="text-align: center; padding: 3rem;">سبد خرید شما خالی است.</p>
-    <div style="text-align: center;">
-        <a href="{% url 'index' %}" class="btn">مشاهده رستوران‌ها</a>
+    <div class="empty-state">
+        <div class="empty-state-icon">🛒</div>
+        <p>{% trans "Your shopping cart is empty." %}</p>
+        <a href="{% url 'index' %}" class="btn mt-2">{% trans "View Restaurants" %}</a>
     </div>
     {% endif %}
 </div>

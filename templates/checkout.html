@@ -1,42 +1,43 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}تسویه حساب - دانیال فود{% endblock %}
+{% block title %}{% trans "Checkout - DanialFood" %}{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 600px; margin: 0 auto;">
-    <h2>ثبت نهایی سفارش</h2>
+<div class="card checkout-card">
+    <h2 class="section-title">{% trans "Finalize Order" %}</h2>
 
-    <div style="margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
-        <p><strong>رستوران:</strong> {{ cart.items.first.menu_item.restaurant.name }}</p>
-        <p><strong>مبلغ قابل پرداخت:</strong> {{ cart.total }} تومان</p>
+    <div class="checkout-summary">
+        <p><strong>{% trans "Restaurant:" %}</strong> {{ cart.items.first.menu_item.restaurant.name }}</p>
+        <p><strong>{% trans "Amount to pay:" %}</strong> {{ cart.total }} {% trans "Toman" %}</p>
     </div>
 
     <form method="post">
         {% csrf_token %}
-        <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">انتخاب آدرس ذخیره شده:</label>
-            <div style="display: grid; gap: 0.5rem; margin-bottom: 1rem;">
+        <div class="form-group">
+            <label>{% trans "Select saved address:" %}</label>
+            <div class="mb-2">
                 {% for addr in user.addresses.all %}
-                <label style="display: flex; align-items: center; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
-                    <input type="radio" name="address_id" value="{{ addr.id }}" {% if addr.is_active or addr.is_default %}checked{% endif %} style="margin-left: 0.5rem;">
+                <label class="address-option">
+                    <input type="radio" name="address_id" value="{{ addr.id }}" {% if addr.is_active or addr.is_default %}checked{% endif %}>
                     <div>
                         <strong>{{ addr.title }}</strong>
-                        <div style="font-size: 0.8rem; color: #666;">{{ addr.city }} - {{ addr.address_text }}</div>
+                        <div class="address-option-text">{{ addr.city }} - {{ addr.address_text }}</div>
                     </div>
                 </label>
                 {% endfor %}
             </div>
 
-            <label style="display: block; margin-bottom: 0.5rem;">یا وارد کردن آدرس جدید:</label>
-            <textarea name="address" style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; min-height: 100px;" placeholder="آدرس دقیق خود را وارد کنید..."></textarea>
+            <label>{% trans "Or enter a new address:" %}</label>
+            <textarea name="address" class="form-control" placeholder="{% trans 'Enter your exact address...' %}"></textarea>
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; margin-bottom: 0.5rem;">توضیحات (اختیاری):</label>
-            <input type="text" name="note" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+        <div class="form-group">
+            <label>{% trans "Notes (optional):" %}</label>
+            <input type="text" name="note" class="form-control" placeholder="{% trans 'Any special instructions...' %}">
         </div>
 
-        <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1.2rem;">تایید و ثبت سفارش</button>
+        <button type="submit" class="btn btn-block btn-lg">{% trans "Confirm and Place Order" %}</button>
     </form>
 </div>
 {% endblock %}

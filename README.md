@@ -35,16 +35,13 @@
 در اینجا نمایی از بخش‌های مختلف پنل وب دانیال فود را مشاهده می‌کنید:
 
 ### ۱. صفحه اصلی و جستجوی رستوران‌ها
-![صفحه اصلی](danialfood_home.png)
+![صفحه اصلی](screenshots/1.png)
 
 ### ۲. صفحه ورود به سیستم
-![صفحه ورود](danialfood_login.png)
+![صفحه ورود](screenshots/2.png)
 
 ### ۳. جزئیات رستوران و منو
-![جزئیات رستوران](danialfood_restaurant_detail.png)
-
-### ۴. پنل مدیریت کل سیستم (Admin)
-![پنل ادمین](danialfood_admin_dashboard.png)
+![جزئیات رستوران](screenshots/3.png)
 
 ---
 
@@ -80,12 +77,17 @@ python manage.py migrate
 ### ۴. ایجاد داده‌های اولیه (Seed Data)
 برای تست برنامه با داده‌های نمونه (رستوران‌ها، کاربران و منوها)، دستور زیر را اجرا کنید:
 ```bash
-python seed_data.py
+python manage.py seed_data --clear
 ```
 
 ### ۵. اجرای سرور
 ```bash
 python manage.py runserver
+```
+
+یا از اسکریپت شروع سریع استفاده کنید:
+```bash
+./start.sh
 ```
 - **پنل وب**: [http://localhost:8000](http://localhost:8000)
 - **پنل مدیریت جنگو**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
@@ -114,4 +116,5 @@ python manage.py runserver
 - **Back-end**: Django 4.2 & Django REST Framework
 - **Database**: SQLite (توسعه) / PostgreSQL (عملیاتی)
 - **Auth**: JWT & Session-based
-- **UI**: Plain HTML/CSS (کاملاً پاسخگو و راست‌چین شده)
+- **UI**: Custom CSS (کاملاً پاسخگو، راست‌چین و چندزبانه)
+- **i18n**: Django standard i18n با پشتیبانی فارسی و انگلیسی

@@ -4,7 +4,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.db import transaction
-from geopy.distance import distance
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from .models import Order, Cart, CartItem, OrderItem
@@ -159,21 +158,23 @@ class OrderViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Calculate delivery fee
+        # Calculate delivery fee using DeliveryFeeCalculator (includes peak-time and zone fees)
         restaurant = serializer.validated_data['restaurant']
         restaurant_location = restaurant.get_location()
-        customer_location = (
-            float(serializer.validated_data['customer_latitude']),
-            float(serializer.validated_data['customer_longitude'])
+        customer_lat = float(serializer.validated_data['customer_latitude'])
+        customer_lng = float(serializer.validated_data['customer_longitude'])
+
+        from apps.delivery.services import DeliveryFeeCalculator
+        fee_result = DeliveryFeeCalculator.calculate_fee(
+            restaurant_lat=float(restaurant_location[0]),
+            restaurant_lng=float(restaurant_location[1]),
+            customer_lat=customer_lat,
+            customer_lng=customer_lng,
         )
-        dist_km = distance(restaurant_location, customer_location).kilometers
-        
-        from config.settings.base import DELIVERY_BASE_FEE, DELIVERY_FEE_PER_KM
-        delivery_fee = DELIVERY_BASE_FEE + (dist_km * DELIVERY_FEE_PER_KM)
-        
+
         validated_data = serializer.validated_data
-        validated_data['delivery_fee'] = delivery_fee
-        validated_data['distance_km'] = dist_km
+        validated_data['delivery_fee'] = fee_result['delivery_fee']
+        validated_data['distance_km'] = fee_result['distance_km']
         
         try:
             order = OrderCreationService.create_order_with_lock(request.user, validated_data)
@@ -290,19 +291,20 @@ class OrderViewSet(viewsets.GenericViewSet):
         restaurant = get_object_or_404(Restaurant, id=restaurant.id)
         
         restaurant_location = restaurant.get_location()
-        customer_location = (
-            float(serializer.validated_data['customer_latitude']),
-            float(serializer.validated_data['customer_longitude'])
+        customer_lat = float(serializer.validated_data['customer_latitude'])
+        customer_lng = float(serializer.validated_data['customer_longitude'])
+
+        from apps.delivery.services import DeliveryFeeCalculator
+        fee_result = DeliveryFeeCalculator.calculate_fee(
+            restaurant_lat=float(restaurant_location[0]),
+            restaurant_lng=float(restaurant_location[1]),
+            customer_lat=customer_lat,
+            customer_lng=customer_lng,
         )
-        
-        dist_km = distance(restaurant_location, customer_location).kilometers
-        
-        from config.settings.base import DELIVERY_BASE_FEE, DELIVERY_FEE_PER_KM
-        delivery_fee = DELIVERY_BASE_FEE + (dist_km * DELIVERY_FEE_PER_KM)
-        
+
         return Response({
-            'distance_km': round(dist_km, 2),
-            'delivery_fee': round(delivery_fee),
-            'base_fee': DELIVERY_BASE_FEE,
-            'fee_per_km': DELIVERY_FEE_PER_KM
+            'distance_km': fee_result['distance_km'],
+            'delivery_fee': fee_result['delivery_fee'],
+            'peak_multiplier': fee_result['peak_multiplier'],
+            'zone_extra_fee': fee_result['zone_extra_fee'],
         })

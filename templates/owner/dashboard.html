@@ -1,78 +1,99 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}پنل مدیریت رستوران | دانیال فود{% endblock %}
+{% block title %}{% trans "Restaurant Management Panel" %} | {% trans "DanialFood" %}{% endblock %}
 
 {% block content %}
-<div style="display: flex;">
+<div class="dashboard">
     <div class="sidebar">
-        <h3>مدیریت رستوران</h3>
-        <ul style="list-style: none; padding: 0;">
-            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--primary);">📊 داشبورد</a></li>
-            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">📋 مدیریت منو</a></li>
-            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">🍔 سفارشات دریافتی</a></li>
-            <li style="padding: 0.5rem 0;"><a href="{% url 'profile' %}" style="text-decoration: none; color: var(--secondary);">🔐 تنظیمات امنیتی</a></li>
+        <h3 class="sidebar-title">{% trans "Restaurant Management" %}</h3>
+        <ul class="sidebar-menu">
+            <li><a href="{% url 'owner_dashboard' %}" class="active">📊 {% trans "Dashboard" %}</a></li>
+            <li><a href="{% url 'admin:index' %}">📋 {% trans "Menu Management" %}</a></li>
+            <li><a href="{% url 'admin:index' %}">🍔 {% trans "Received Orders" %}</a></li>
+            <li><a href="{% url 'profile' %}">🔐 {% trans "Security Settings" %}</a></li>
         </ul>
     </div>
 
-    <div class="main-content" style="flex: 1;">
+    <div class="main-content">
         {% if not restaurant %}
-            <div class="card" style="text-align: center;">
-                <h2>شما هنوز رستورانی ثبت نکرده‌اید.</h2>
-                <a href="#" class="btn">ثبت رستوران جدید</a>
+            <div class="card text-center">
+                <h2>{% trans "You have not registered a restaurant yet." %}</h2>
+                <a href="{% url 'admin:index' %}" class="btn mt-2">{% trans "Register new restaurant" %}</a>
             </div>
         {% else %}
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
-                <div class="card" style="text-align: center;">
-                    <h3>فروش امروز</h3>
-                    <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">{{ report.total_revenue }} تومان</p>
+            <div class="grid grid-3 mb-4">
+                <div class="card stat-card">
+                    <h3>{% trans "Today's Sales" %}</h3>
+                    <p class="stat-value primary">{{ report.total_revenue }} {% trans "Toman" %}</p>
                 </div>
-                <div class="card" style="text-align: center;">
-                    <h3>سفارشات جدید</h3>
-                    <p style="font-size: 1.5rem; font-weight: bold; color: #ffc107;">{{ report.pending_orders }}</p>
+                <div class="card stat-card">
+                    <h3>{% trans "New Orders" %}</h3>
+                    <p class="stat-value warning">{{ report.pending_orders }}</p>
                 </div>
-                <div class="card" style="text-align: center;">
-                    <h3>وضعیت رستوران</h3>
+                <div class="card stat-card">
+                    <h3>{% trans "Restaurant Status" %}</h3>
                     <p>
                         <span class="badge {% if restaurant.is_open %}badge-success{% else %}badge-danger{% endif %}">
-                            {{ restaurant.is_open|yesno:"باز است,بسته است" }}
+                            {{ restaurant.is_open|yesno:"Open,Closed" }}
                         </span>
                     </p>
-                    <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">تغییر وضعیت</button>
+                    <form action="{% url 'owner_toggle_status' %}" method="post" class="mt-1">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary btn-sm">{% trans "Change Status" %}</button>
+                    </form>
                 </div>
             </div>
 
             <div class="card">
-                <h2>سفارشات اخیر ({{ restaurant.name }})</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>شماره</th>
-                            <th>مشتری</th>
-                            <th>آیتم‌ها</th>
-                            <th>مبلغ</th>
-                            <th>وضعیت</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in orders %}
-                        <tr>
-                            <td>#{{ order.order_number }}</td>
-                            <td>{{ order.customer.username }}</td>
-                            <td>{{ order.order_items.count }} آیتم</td>
-                            <td>{{ order.total_amount }}</td>
-                            <td><span class="badge badge-warning">{{ order.get_status_display }}</span></td>
-                            <td>
-                                <button class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">تایید</button>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 2rem;">سفارشی وجود ندارد.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <h2 class="section-title">{% trans "Recent Orders" %} ({{ restaurant.name }})</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>{% trans "Number" %}</th>
+                                <th>{% trans "Customer" %}</th>
+                                <th>{% trans "Items" %}</th>
+                                <th>{% trans "Amount" %}</th>
+                                <th>{% trans "Status" %}</th>
+                                <th>{% trans "Action" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>#{{ order.order_number }}</td>
+                                <td>{{ order.customer.username }}</td>
+                                <td>{{ order.items.count }} {% trans "items" %}</td>
+                                <td>{{ order.total_amount }}</td>
+                                <td><span class="badge badge-warning">{{ order.get_status_display }}</span></td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                    <form action="{% url 'owner_confirm_order' order.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-sm">{% trans "Confirm" %}</button>
+                                    </form>
+                                    {% elif order.status == 'confirmed' %}
+                                    <form action="{% url 'owner_start_preparing' order.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm">{% trans "Start Preparing" %}</button>
+                                    </form>
+                                    {% elif order.status == 'preparing' %}
+                                    <form action="{% url 'owner_mark_ready' order.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-sm">{% trans "Ready" %}</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center p-3">{% trans "No orders found." %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         {% endif %}
     </div>

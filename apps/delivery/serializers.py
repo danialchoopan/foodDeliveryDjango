@@ -141,9 +141,9 @@ class NearbyRiderSerializer(serializers.Serializer):
         lng = float(attrs['longitude'])
         # Basic validation for Iran coordinates
         if lat < 25 or lat > 40:
-            raise serializers.ValidationError({"latitude": "طول جغرافیایی نامعتبر است."})
+            raise serializers.ValidationError({"latitude": "عرض جغرافیایی نامعتبر است."})
         if lng < 44 or lng > 64:
-            raise serializers.ValidationError({"longitude": "عرض جغرافیایی نامعتبر است."})
+            raise serializers.ValidationError({"longitude": "طول جغرافیایی نامعتبر است."})
         return attrs
 
 

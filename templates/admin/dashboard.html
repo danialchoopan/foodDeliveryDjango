@@ -1,71 +1,77 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}پنل مدیریت سیستم | دانیال فود{% endblock %}
+{% block title %}{% trans "System Management Panel" %} | {% trans "DanialFood" %}{% endblock %}
 
 {% block content %}
-<div style="display: flex;">
+<div class="dashboard">
     <div class="sidebar">
-        <h3>مدیریت کل سیستم</h3>
-        <ul style="list-style: none; padding: 0;">
-            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--primary);">👤 مدیریت کاربران</a></li>
-            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">🏢 مدیریت رستوران‌ها</a></li>
-            <li style="padding: 0.5rem 0;"><a href="#" style="text-decoration: none; color: var(--secondary);">🚴 مدیریت پیک‌ها</a></li>
-            <li style="padding: 0.5rem 0;"><a href="{% url 'profile' %}" style="text-decoration: none; color: var(--secondary);">🔐 تنظیمات امنیتی</a></li>
+        <h3 class="sidebar-title">{% trans "System Management" %}</h3>
+        <ul class="sidebar-menu">
+            <li><a href="{% url 'admin_dashboard' %}" class="active">👤 {% trans "User Management" %}</a></li>
+            <li><a href="{% url 'admin:index' %}">🏢 {% trans "Restaurant Management" %}</a></li>
+            <li><a href="{% url 'admin:index' %}">🚴 {% trans "Rider Management" %}</a></li>
+            <li><a href="{% url 'profile' %}">🔐 {% trans "Security Settings" %}</a></li>
         </ul>
     </div>
 
-    <div class="main-content" style="flex: 1;">
-        <h2>داشبورد مدیریتی دانیال فود</h2>
+    <div class="main-content">
+        <h2 class="section-title">{% trans "DanialFood Admin Dashboard" %}</h2>
 
-        <div class="grid" style="grid-template-columns: repeat(4, 1fr);">
-            <div class="card" style="border-right: 4px solid var(--primary);">
-                <h3>تعداد کاربران</h3>
-                <p style="font-size: 1.5rem;">{{ user_count }}</p>
+        <div class="grid grid-4 mb-4">
+            <div class="card stat-card stat-card-bordered">
+                <h3>{% trans "Total Users" %}</h3>
+                <p class="stat-value primary">{{ user_count }}</p>
             </div>
-            <div class="card" style="border-right: 4px solid #28a745;">
-                <h3>رستوران‌های فعال</h3>
-                <p style="font-size: 1.5rem;">{{ restaurant_count }}</p>
+            <div class="card stat-card stat-card-bordered green">
+                <h3>{% trans "Active Restaurants" %}</h3>
+                <p class="stat-value success">{{ restaurant_count }}</p>
             </div>
-            <div class="card" style="border-right: 4px solid #17a2b8;">
-                <h3>سفارشات امروز</h3>
-                <p style="font-size: 1.5rem;">{{ today_orders }}</p>
+            <div class="card stat-card stat-card-bordered blue">
+                <h3>{% trans "Today's Orders" %}</h3>
+                <p class="stat-value info">{{ today_orders }}</p>
             </div>
-            <div class="card" style="border-right: 4px solid #ffc107;">
-                <h3>پیک‌های آنلاین</h3>
-                <p style="font-size: 1.5rem;">{{ online_riders }}</p>
+            <div class="card stat-card stat-card-bordered yellow">
+                <h3>{% trans "Online Riders" %}</h3>
+                <p class="stat-value warning">{{ online_riders }}</p>
             </div>
         </div>
 
         <div class="card">
-            <h2>رستوران‌های در انتظار تایید</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>نام رستوران</th>
-                        <th>صاحب رستوران</th>
-                        <th>شماره تماس</th>
-                        <th>تاریخ ثبت‌نام</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for rest in pending_restaurants %}
-                    <tr>
-                        <td>{{ rest.name }}</td>
-                        <td>{{ rest.owner.username }}</td>
-                        <td>{{ rest.phone_number }}</td>
-                        <td>{{ rest.created_at|date:"Y/m/d" }}</td>
-                        <td>
-                            <button class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">تایید رستوران</button>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 2rem;">موردی برای تایید وجود ندارد.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <h2 class="section-title">{% trans "Restaurants Pending Verification" %}</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Restaurant Name" %}</th>
+                            <th>{% trans "Owner" %}</th>
+                            <th>{% trans "Phone" %}</th>
+                            <th>{% trans "Registration Date" %}</th>
+                            <th>{% trans "Action" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rest in pending_restaurants %}
+                        <tr>
+                            <td>{{ rest.name }}</td>
+                            <td>{{ rest.owner.username }}</td>
+                            <td>{{ rest.phone_number }}</td>
+                            <td>{{ rest.created_at|date:"Y/m/d" }}</td>
+                            <td>
+                                <form action="{% url 'admin_verify_restaurant' rest.pk %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">{% trans "Verify Restaurant" %}</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center p-3">{% trans "No restaurants pending verification." %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
